@@ -4,13 +4,15 @@ import NavMenu from './components/common/NavMenu';
 import {BrowserRouter} from 'react-router-dom';
 import Routes from './components/common/Routes';
 import './App.css'
+import Header from './components/common/Header';
 function App() {
   return (
 
     <BrowserRouter>
       <div className='App'>
+        <Header />
         <div className='body'>
-          <header> National Parks</header>
+          
           <div className='sidebar'>
             <NavMenu />
           </div>
