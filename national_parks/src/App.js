@@ -1,28 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Button from 'react-bootstrap/Button';
-
+import NavMenu from './components/common/NavMenu';
+import {BrowserRouter} from 'react-router-dom';
+import Routes from './components/common/Routes';
+import './App.css'
+import Header from './components/common/Header';
 function App() {
   return (
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    //   <Button>Amanda</Button>
-    // </div>
-    <Button>Amanda Bsaibes</Button>
+
+    <BrowserRouter>
+      <div className='App'>
+        <Header />
+        <div className='body'>
+          
+          <div className='sidebar'>
+            <NavMenu />
+          </div>
+          <div className='content'>
+            <Routes />
+          </div>
+        </div>
+      </div>
+    </BrowserRouter>
+    
     );
 }
 
