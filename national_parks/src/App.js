@@ -12,7 +12,6 @@ function App() {
       <div className='App'>
         <Header />
         <div className='body'>
-          
           <div className='sidebar'>
             <NavMenu />
           </div>
