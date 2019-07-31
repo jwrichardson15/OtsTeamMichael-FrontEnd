@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { getEmployeeTickets } from '../api/employeeTicketApi';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import MyTicketsTable from './MyTicketsTable';
-import Button from 'react-bootstrap/Button';
+import {Form, Button} from 'react-bootstrap/Button';
 // import BootstrapTable from 'react-bootstrap-table-next';
 import ReactTable from 'react-table';
 const MyTickets = () => {
