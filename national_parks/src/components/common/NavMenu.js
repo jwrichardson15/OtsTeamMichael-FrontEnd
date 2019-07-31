@@ -10,6 +10,9 @@ const NavMenu = () => {
         <Navbar.Brand>NavBar</Navbar.Brand>
         <Nav>
           <Nav.Item>
+            <Nav.Link as={NavLink} to="/createTicket">Create Ticket</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
             <Nav.Link as={NavLink} to="/allTickets">All Tickets</Nav.Link>
           </Nav.Item>
           <Nav.Item>
