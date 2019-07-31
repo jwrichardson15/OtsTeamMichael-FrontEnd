@@ -1,5 +1,10 @@
+import axios from 'axios';
+
 // Mocked createTicket
 export function createTicket(body) {
-  console.log("Ticket Created -", body);
-  return Promise.resolve(body);
+  axios.post('/tickets', body).then(handleResponse);
+}
+
+function handleResponse(response) {
+  return response.data;
 }

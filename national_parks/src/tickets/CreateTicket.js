@@ -1,3 +1,5 @@
+// Still needed:
+// Responses for tickets being created or failed
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Form } from 'react-bootstrap';
 import { getAllCategories } from '../api/categoriesApi';
@@ -8,7 +10,7 @@ const CreateTicket = () => {
 
   const [categoriesData, setCategoriesData] = useState([]);
   const [parksData, setParksData] = useState([]);
-  const [ticketData, setTicketData] = useState({"park": 0, "category": 0, "email": "", description: ""});
+  const [ticketData, setTicketData] = useState({"parkId": 0, "categoryId": 0, "email": "", description: ""});
 
   useEffect(() => {
     getAllCategories()
@@ -49,14 +51,14 @@ const CreateTicket = () => {
       <Form.Row>
         <Form.Group as={Col} controlId="formCreateTicketPark">
           <Form.Label>Park</Form.Label>
-          <Form.Control as="select" onChange={handleChange('park')} value={ticketData.park}>
+          <Form.Control as="select" onChange={handleChange('parkId')} value={ticketData.park}>
             <option value="0">Select Park</option>
             {parksData.map((value, index) => {return <option key={index} value={value.id}>{value.name}</option>})}
           </Form.Control>
         </Form.Group>
         <Form.Group as={Col} controlId="formCreateTicketCategory">
           <Form.Label>Category</Form.Label>
-          <Form.Control as="select" onChange={handleChange('category')} value={ticketData.category}>
+          <Form.Control as="select" onChange={handleChange('categoryId')} value={ticketData.category}>
             <option value="0">Select Category</option>
             {categoriesData.map((value, index) => {return <option key={index} value={value.id}>{value.name}</option>})}
           </Form.Control>
