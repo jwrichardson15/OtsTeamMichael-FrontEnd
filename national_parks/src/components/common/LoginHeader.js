@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, OverlayTrigger, Popover, } from 'react-bootstrap';
 import Login from './Login';
 import { authenticationService } from '../../services/AuthenticationService';
+import { withRouter } from 'react-router-dom';
 
-const LoginHeader = () => {
+const LoginHeader = (props) => {
 
   // Function to call to set the loggedOut state in the component
   const [loggedOut, setLoggedOut] = useState(true);
@@ -23,6 +24,7 @@ const LoginHeader = () => {
 
   const doLogOut = () => {
     authenticationService.logout();
+    props.history.push('/');
   }
 
   const popover = (
@@ -49,4 +51,4 @@ const LoginHeader = () => {
   }
 };
 
-export default LoginHeader;
+export default withRouter(LoginHeader);

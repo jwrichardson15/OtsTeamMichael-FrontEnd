@@ -40,6 +40,7 @@ const MyTickets = () => {
     {
       accessor: 'id',
       Header: 'ID',
+      width: 100
     }, 
     {
       accessor: 'categoryName',
@@ -63,6 +64,7 @@ const MyTickets = () => {
     },
     {
       Header: '',
+      width: 200,
       Cell: row => (
         employeeTickets[row.index]["editMode"] ? 
           <ButtonToolbar>
