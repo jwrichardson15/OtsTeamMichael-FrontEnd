@@ -3,23 +3,27 @@ import { getEmployeeTickets } from '../api/employeeTicketApi';
 import { getCategories } from '../api/categoryApi';
 import { getStatuses } from '../api/statusApi';
 import { updateTicket } from '../api/ticketApi';
-import cellEditFactory from 'react-bootstrap-table2-editor';
-import MyTicketsTable from './MyTicketsTable';
-import {Form, Button} from 'react-bootstrap';
-// import BootstrapTable from 'react-bootstrap-table-next';
+import Button from 'react-bootstrap/Button';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
+import Form from 'react-bootstrap/Form';
 import ReactTable from 'react-table';
+
 const MyTickets = () => {
   const [employeeTickets, setEmployeeTickets] = useState([]);
-  const [editMode, setEditMode] = useState(false);
+  const [editingTicket, setEditingTickets] = useState([]);
   const [editEmployeeTickets, setEditEmployeeTickets] = useState([]);
   const [categories, setCategories] = useState([]);
   const [statuses, setStatuses] = useState([]);
-  // const [tableColumns, setTableColumns] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+
   useEffect(() => {
     getEmployeeTickets("stGar2332")
       .then(result => {
+        result.forEach( row => {
+          row['editMode'] = false;
+        })
         setEmployeeTickets(result);
-        setEditEmployeeTickets([]);
+        setEditingTickets(JSON.parse(JSON.stringify(result)));
       });
     getCategories()
       .then(result => {
@@ -29,19 +33,13 @@ const MyTickets = () => {
       .then(result => {
         setStatuses(result);
       });
-    
   }, []);
 
-  useEffect(() => {
-    console.log("second use effect in action");
-
-  }, []);
 
   const tableColumns = [
     {
       accessor: 'id',
       Header: 'ID',
-      
     }, 
     {
       accessor: 'categoryName',
@@ -66,38 +64,55 @@ const MyTickets = () => {
     {
       Header: '',
       Cell: row => (
-        <div>
-            <Button onClick={() => handleEdit(row)}>Edit</Button>
-            <Button onClick={() => handleSave(row)}>Save</Button>
-        </div>
+        employeeTickets[row.index]["editMode"] ? 
+          <ButtonToolbar>
+              <Button variant="success" onClick={() => _handleSave(row)} size="sm">Save </Button>
+              <Button variant="danger" onClick={() => _handleCancle(row)} size="sm">Cancel</Button>
+          </ButtonToolbar>
+        :
+          <ButtonToolbar>
+            <Button variant="primary" onClick={() => _handleEdit(row)} disabled={editMode} size="sm">Edit</Button>
+          </ButtonToolbar>
       )
-   }
+    }  
   ];
 
-  const handleSave = (row) => {
-    // console.log("saving", employeeTickets[row.index]["employeeNotes"]);
-    updateTicket(employeeTickets[row.index]["id"], employeeTickets[row.index]).then(response => {
+  const _handleSave = (row) => {
+    updateTicket(editingTicket[row.index]["id"], editingTicket[row.index]).then(response => {
       console.log("update ticket response", response);
     })
-    setEditMode(!editMode);
+    editingTicket[row.index]["editMode"] = false;
+    setEmployeeTickets(JSON.parse(JSON.stringify(editingTicket)));
+    setEditMode(false);
+  }
+
+  const _handleCancle = (row) => {
+    editingTicket[row.index]["editMode"] = false;
+    employeeTickets[row.index]["editMode"] = false;
+    setEmployeeTickets([...employeeTickets]);
+    setEditingTickets(editingTicket);
+    setEditMode(false);
   }
 
   const _handleChange = (rowIndex, category) => event => {
-    employeeTickets[rowIndex][category] = event.target.value;
-    setEmployeeTickets(employeeTickets);
+    editingTicket[rowIndex][category] = event.target.value;
+    setEditingTickets(editingTicket);
   }
 
-  const handleEdit = (row) => {
-    // JSON.parse(JSON.stringify(nodesArray))
+  const _handleEdit = (row) => {
       let editEmployeeTickets = JSON.parse(JSON.stringify(employeeTickets));
-
-      editEmployeeTickets[row.index]["categoryName"] = (
+      var index = row.index;
+      editEmployeeTickets[index]["categoryName"] = (
         <Form>
-          <Form.Group controlId="categorySelect">
-            <Form.Control as="select" onChange={_handleChange(row.index, "categoryName")} >
+          <Form.Group controlId="categorySelect" >
+            <Form.Control 
+              as="select" 
+              onChange={_handleChange(index, "categoryName")} 
+              defaultValue={employeeTickets[index]["categoryName"]} 
+            >
               {
-                categories.map((value, index) => {
-                  return(<option key={index}>{value["name"]}</option>);
+                categories.map((value) => {
+                  return(<option key={value["id"]}>{value["name"]}</option>);
                 })
               }
             </Form.Control>
@@ -105,13 +120,16 @@ const MyTickets = () => {
         </Form> 
       );
 
-      editEmployeeTickets[row.index]["status"] = (
+      editEmployeeTickets[index]["status"] = (
         <Form>
           <Form.Group controlId="statusSelect">
-            <Form.Control as="select" onChange={_handleChange(row.index, "status")}>
+            <Form.Control 
+              as="select" 
+              onChange={_handleChange(index, "status")}
+              defaultValue={employeeTickets[index]["status"]}>
               {
-                statuses.map((value, index) => {
-                  return(<option key={index}>{value["name"]}</option>);
+                statuses.map((value) => {
+                  return(<option key={value["id"]}>{value["name"]}</option>);
                 })
               }
             </Form.Control>
@@ -119,22 +137,32 @@ const MyTickets = () => {
         </Form>
       );
 
-      editEmployeeTickets[row.index]["description"] = (
+      editEmployeeTickets[index]["description"] = (
         <Form>
-          <Form.Control defaultValue={employeeTickets[row.index]["description"]} onChange={_handleChange(row.index, "description")}/>
-      </Form> 
+          <Form.Control 
+            onChange={_handleChange(row.index, "description")}
+            defaultValue={employeeTickets[row.index]["description"]} 
+          />
+        </Form> 
       );  
 
-      editEmployeeTickets[row.index]["employeeNotes"] = (
+      editEmployeeTickets[index]["employeeNotes"] = (
         <Form>
-          <Form.Control as="textarea" rows="3" defaultValue={employeeTickets[row.index]["employeeNotes"]} onChange={_handleChange(row.index, "employeeNotes")}/>
-      </Form> 
+          <Form.Control 
+            as="textarea" rows="3" 
+            onChange={_handleChange(index, "employeeNotes")}
+            defaultValue={employeeTickets[index]["employeeNotes"]} 
+          />
+        </Form> 
       );
       
       setEditEmployeeTickets(editEmployeeTickets);
-      // console.log(editEmployeeTickets);
-      console.log(editEmployeeTickets);
-      setEditMode(!editMode);
+      setEditMode(true);
+      employeeTickets[index]["editMode"] = true;
+      setEmployeeTickets(employeeTickets);
+      editingTicket[index]["editMode"] = true;
+      setEditingTickets(editingTicket);
+
   }
 
   return (
@@ -144,10 +172,6 @@ const MyTickets = () => {
 
   );
 };
-
-// Object.keys(vals).map((key, index) => ( 
-//   <p key={index}> this is my key {key} and this is my value {vals[key]}</p> 
-// ))
 
 export default MyTickets;
 

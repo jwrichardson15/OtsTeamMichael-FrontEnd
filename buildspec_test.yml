@@ -1,0 +1,21 @@
+---
+version: 0.2
+
+env:
+  variables:
+    CI: "true"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 8
+    commands:
+      - cd national_parks
+      - npm install
+  build:
+    commands:
+      - npm test -- --coverage
+
+cache:
+  paths:
+    - '/root/.npm/**/*'

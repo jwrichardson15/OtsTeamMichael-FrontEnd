@@ -1,10 +1,28 @@
 import React from 'react';
-import Navbar from 'react-bootstrap/Navbar';
+import "./Header.css";
+import nps from '../../images/nps.png';
+import { Button, Navbar, OverlayTrigger} from 'react-bootstrap';
+import Login from './Login';
+import LoginHeader from './LoginHeader';
 
 const Header = () => {
   return (
     <Navbar bg="light" className="Header">
-      <Navbar.Brand>National Parks</Navbar.Brand>
+      <Navbar.Brand>
+      <img
+        src={nps}
+        width="30"
+        // height="30"
+        className="d-inline-block align-top"
+        alt="National Parks Service Logo"
+      />
+        {' National Parks Service'}
+        
+      </Navbar.Brand>
+
+      <Navbar.Collapse className="justify-content-end">
+        <LoginHeader />
+      </Navbar.Collapse>
     </Navbar>
   );
 };

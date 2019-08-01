@@ -6,7 +6,7 @@ import './NavMenu.css';
 
 const NavMenu = () => {
   return (
-    <Navbar>
+    <Navbar className="navMenu">
         <Navbar.Brand>NavBar</Navbar.Brand>
         <Nav>
           <Nav.Item>

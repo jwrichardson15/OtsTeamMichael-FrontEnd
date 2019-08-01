@@ -11,12 +11,3 @@ export function getParkTickets(park) {
     params: {park}
   }) .then (response => {console.log(response); return response.data});
 }
-
-
-// .get(`${API_URL}${url}`, {
-//   params: data,
-//   headers: {
-//     Authorization: getAuthorizationToken()
-//   }
-// })
-// .then(handleResponse);
