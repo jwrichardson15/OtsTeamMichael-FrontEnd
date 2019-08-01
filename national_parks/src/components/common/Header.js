@@ -1,7 +1,9 @@
 import React from 'react';
-import Navbar from 'react-bootstrap/Navbar';
 import "./Header.css";
 import nps from '../../images/nps.png';
+import { Button, Navbar, OverlayTrigger} from 'react-bootstrap';
+import Login from './Login';
+import LoginHeader from './LoginHeader';
 
 const Header = () => {
   return (
@@ -17,6 +19,10 @@ const Header = () => {
         {' National Parks Service'}
         
       </Navbar.Brand>
+
+      <Navbar.Collapse className="justify-content-end">
+        <LoginHeader />
+      </Navbar.Collapse>
     </Navbar>
   );
 };
