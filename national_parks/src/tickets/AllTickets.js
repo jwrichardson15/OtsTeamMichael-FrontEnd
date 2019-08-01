@@ -3,19 +3,23 @@ import { getParkTickets } from '../api/employeeTicketApi';
 import {Form, Button, InputGroup, FormControl} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import { updateTicket } from '../api/ticketApi';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 
 
 const AllTickets = () => {
   const [parkTickets, setParkTickets] = useState([]);
-  const [editMode, setEditMode] = useState(false);
   const [editParkTickets, setEditParkTickets] = useState([]);
+  const [editingTicket, setEditingTicket] = useState([]);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    console.log("here");
     getParkTickets(3)
       .then(result => {
+        result.forEach( row => {
+          row['editMode'] = false;
+        });
         setParkTickets(result);
-        setEditParkTickets([]);
+        setEditingTicket(JSON.parse(JSON.stringify(result)));
       });
   }, []);
 
@@ -47,49 +51,70 @@ const AllTickets = () => {
     {
       Header: 'Checkout Task',
       Cell: row => (
-        <div>
-            <Button onClick={() => handleEdit(row)}>Edit</Button>
-            <Button onClick={() => handleSave(row)}>Save</Button>
-        </div>
+        parkTickets[row.index]["editMode"] ? 
+          <ButtonToolbar>
+              <Button variant="success" onClick={() => handleSave(row)} size="sm">Save </Button>
+              <Button variant="danger" onClick={() => handleCancel(row)} size="sm">Cancel</Button>
+          </ButtonToolbar>
+        :
+          <ButtonToolbar>
+            <Button variant="primary" onClick={() => handleEdit(row)} disabled={editMode} size="sm">Edit</Button>
+          </ButtonToolbar>
       ),
       width: 200
    }
   ];
+
   const handleChange = (rowIndex, employeeUsername) => event => {
-    parkTickets[rowIndex][employeeUsername] = event.target.value;
-    setParkTickets(parkTickets);
-  }
+    editingTicket[rowIndex][employeeUsername] = event.target.value;
+    setEditingTicket(editingTicket);
+  };
 
   const handleSave = (row) => {
     updateTicket(parkTickets[row.index]["id"], parkTickets[row.index]).then(response => {
       console.log("update ticket response", response);
     });
-    setEditMode(!editMode);
+    editingTicket[row.index]["editMode"] = false;
+    setParkTickets(JSON.parse(JSON.stringify(editingTicket)));
+    setEditMode(false);
+  }
+  
+  const handleCancel = (row) => {
+    editingTicket[row.index]["editMode"] = false;
+    parkTickets[row.index]["editMode"] = false;
+    setParkTickets([...parkTickets]);
+    setEditingTicket(editingTicket);
+    setEditMode(false);
   }
 
-  const handleEdit = (row) => {
+    const handleEdit = (row) => {
+      var index = row.index;
+      let editParkTickets = JSON.parse(JSON.stringify(parkTickets));
 
-    let editParkTickets = JSON.parse(JSON.stringify(parkTickets));
+      editParkTickets[index]["employeeUsername"] = (
+            <Form>
+                <Form.Control defaultValue={parkTickets[index]["employeeUsername"]} 
+                              as="textarea" 
+                              placeholder="Employee Username" 
+                              defaultValue={parkTickets[index]["employeeNotes"]}
+                              onChange={handleChange(row.index, 'employeeUsername')}/>
+            </Form>
+        );
+        setEditParkTickets(editParkTickets);
+        setEditMode(true);
+        parkTickets[index]["editMode"] = true;
+        setParkTickets(parkTickets);
+        editingTicket[index]["editMode"] = true;
+        setEditingTicket(editingTicket);
+    }
 
-    editParkTickets[row.index]["categoryName"] = (
-          <Form>
-              <Form.Control defaultValue={parkTickets[row.index]["employeeUsername"]} as="textarea" placeholder="Employee Username" onChange={handleChange(row.index, 'employeeUsername')}/>
-          </Form>
-      );
-      setEditParkTickets(editParkTickets);
-      setEditMode(!editMode);
-  }
 
   return (
     <div>
-      <ReactTable data={parkTickets} columns={tableColumns}/>
+      <ReactTable data={!editMode ? parkTickets : editParkTickets} columns={tableColumns}/>
     </div>
 
   );
-};
-
-// Object.keys(vals).map((key, index) => ( 
-//   <p key={index}> this is my key {key} and this is my value {vals[key]}</p> 
-// ))
+}
 
 export default AllTickets;
