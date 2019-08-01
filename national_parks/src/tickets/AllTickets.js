@@ -2,19 +2,20 @@ import React, {useState, useEffect} from 'react';
 import { getParkTickets } from '../api/employeeTicketApi';
 import {Form, Button, InputGroup, FormControl} from 'react-bootstrap';
 import ReactTable from 'react-table';
+import { updateTicket } from '../api/ticketApi';
 
 
 const AllTickets = () => {
   const [parkTickets, setParkTickets] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const [editParkTickets, setEditParkTickets] = useState([]);
 
   useEffect(() => {
     console.log("here");
     getParkTickets(3)
       .then(result => {
-        console.log(result);
         setParkTickets(result);
-        console.log(parkTickets)
+        setEditParkTickets([]);
       });
   }, []);
 
@@ -54,24 +55,28 @@ const AllTickets = () => {
       width: 200
    }
   ];
+  const handleChange = (rowIndex, employeeUsername) => event => {
+    parkTickets[rowIndex][employeeUsername] = event.target.value;
+    setParkTickets(parkTickets);
+  }
 
   const handleSave = (row) => {
+    updateTicket(parkTickets[row.index]["id"], parkTickets[row.index]).then(response => {
+      console.log("update ticket response", response);
+    });
     setEditMode(!editMode);
   }
 
   const handleEdit = (row) => {
-      console.log(row);
-      var tickets = [...parkTickets];
-      Object.keys(tickets[row.index]).map((key, index) => (
-        tickets[row.index]["employeeUsername"] = 
+
+    let editParkTickets = JSON.parse(JSON.stringify(parkTickets));
+
+    editParkTickets[row.index]["categoryName"] = (
           <Form>
-            <Form.Group controlId="exampleForm.ControlSelect1">
-              <Form.Control as="textarea" placeholder="Employee Username">
-              </Form.Control>
-            </Form.Group>
+              <Form.Control defaultValue={parkTickets[row.index]["employeeUsername"]} as="textarea" placeholder="Employee Username" onChange={handleChange(row.index, 'employeeUsername')}/>
           </Form>
-      ))
-      setParkTickets(tickets);
+      );
+      setEditParkTickets(editParkTickets);
       setEditMode(!editMode);
   }
 
