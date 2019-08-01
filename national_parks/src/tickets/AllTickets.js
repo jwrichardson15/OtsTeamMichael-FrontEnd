@@ -1,21 +1,32 @@
 import React, {useState, useEffect} from 'react';
 import { getParkTickets } from '../api/employeeTicketApi';
 import {Form, Button, InputGroup, FormControl} from 'react-bootstrap';
+import Spinner from 'react-bootstrap/Spinner';
 import ReactTable from 'react-table';
-
+import { updateTicket } from '../api/ticketApi';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
+import {authenticationService} from '../services/AuthenticationService';
 
 const AllTickets = () => {
   const [parkTickets, setParkTickets] = useState([]);
-  const [editMode, setEditMode] = useState(false);
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("here");
-    getParkTickets(3)
-      .then(result => {
-        console.log(result);
-        setParkTickets(result);
-        console.log(parkTickets)
-      });
+    authenticationService.currentUser.subscribe(value => {
+      if (value != null) {
+        var tickets = {...value};
+        setUser(tickets);
+        getParkTickets(value["parkId"])
+          .then(result => {
+            setParkTickets(result);
+            setLoading(false);
+          });
+      }
+      else {
+        setLoading(true);
+      }
+    });
   }, []);
 
   const tableColumns = [
@@ -46,45 +57,55 @@ const AllTickets = () => {
     {
       Header: 'Checkout Task',
       Cell: row => (
-        <div>
-            <Button onClick={() => handleEdit(row)}>Edit</Button>
-            <Button onClick={() => handleSave(row)}>Save</Button>
-        </div>
+        parkTickets[row.index]["employeeUsername"] 
+        ? 
+          parkTickets[row.index]["employeeUsername"] === user["username"] 
+          ? 
+            <Button variant="danger" onClick={() => _handleUnassign(row)} size="sm">Unassign</Button> 
+          : 
+            <></> 
+        :
+          <ButtonToolbar>
+            <Button variant="success" onClick={() => _handleAssign(row)} size="sm">Assign</Button>
+          </ButtonToolbar>
       ),
       width: 200
    }
   ];
 
-  const handleSave = (row) => {
-    setEditMode(!editMode);
+  const _handleUnassign = (row) => {
+    var assignTicket = {...parkTickets[row.index]};
+    assignTicket["employeeUsername"] = null;
+    updateTicket(parkTickets[row.index]["id"], assignTicket).then(response => {
+      const updatedTickets = JSON.parse(JSON.stringify(parkTickets));
+      updatedTickets[row.index] = assignTicket;
+      setParkTickets(updatedTickets);
+    });
   }
 
-  const handleEdit = (row) => {
-      console.log(row);
-      var tickets = [...parkTickets];
-      Object.keys(tickets[row.index]).map((key, index) => (
-        tickets[row.index]["employeeUsername"] = 
-          <Form>
-            <Form.Group controlId="exampleForm.ControlSelect1">
-              <Form.Control as="textarea" placeholder="Employee Username">
-              </Form.Control>
-            </Form.Group>
-          </Form>
-      ))
-      setParkTickets(tickets);
-      setEditMode(!editMode);
+  const _handleAssign = (row) => {
+    var assignTicket = {...parkTickets[row.index]};
+    assignTicket["employeeUsername"] = user["username"];
+    updateTicket(parkTickets[row.index]["id"], assignTicket).then(response => {
+      const updatedTickets = JSON.parse(JSON.stringify(parkTickets));
+      updatedTickets[row.index] = assignTicket;
+      setParkTickets(updatedTickets);
+    });
   }
 
   return (
+    loading 
+    ? 
+
+    <Spinner animation="border" role="status" variant="success" className="spinner">
+      <span className="sr-only">Loading...</span>
+    </Spinner>
+    :
     <div>
       <ReactTable data={parkTickets} columns={tableColumns}/>
     </div>
 
   );
-};
-
-// Object.keys(vals).map((key, index) => ( 
-//   <p key={index}> this is my key {key} and this is my value {vals[key]}</p> 
-// ))
+}
 
 export default AllTickets;
