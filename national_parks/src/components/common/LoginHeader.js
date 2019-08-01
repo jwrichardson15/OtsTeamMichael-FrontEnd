@@ -12,8 +12,14 @@ const LoginHeader = () => {
   // Magic useEffect to set the loggedOut state from the AuthenticationService
   useEffect(() => {
     authenticationService.currentToken.subscribe(value => setLoggedOut(!value));
-    authenticationService.currentUser.subscribe(value => setName(value.fname + " " + value.lname));
+    authenticationService.currentUser.subscribe(value => doSetName(value));
   });
+
+  const doSetName = user => {
+    if (user != null) {
+      setName(user.fname + " " + user.lname);
+    }
+  }
 
   const doLogOut = () => {
     authenticationService.logout();
