@@ -16,7 +16,7 @@ export const authenticationService = {
 
 // Need to handle failures here
 function login(username, password) {
-  return axios.post('/auth/login', {"username": username, "password": password})
+  return axios.post('/api/auth/login', {"username": username, "password": password})
     .then(handleResponse)
     .then(({token, user}) => {
       localStorage.setItem('token', token);
