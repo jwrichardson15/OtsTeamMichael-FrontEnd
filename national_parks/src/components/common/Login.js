@@ -23,7 +23,7 @@ const Login = () => {
     <Form inline>
       <FormControl type="text" placeholder="Username" className="mr-sm-2" value={username} onChange={handleUsername()}/>
       <FormControl type="password" placeholder="Password" className="mr-sm-2" value={password} onChange={handlePassword()} />
-      <Button variant="outline-success" onClick={doLogin}>Login</Button>
+      <Button variant="outline-success" onClick={doLogin} onKeyPress={doLogin}>Login</Button>
     </Form>
   );
 }

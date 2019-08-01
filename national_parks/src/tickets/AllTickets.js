@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { getParkTickets } from '../api/employeeTicketApi';
 import {Form, Button, InputGroup, FormControl} from 'react-bootstrap';
+import Spinner from 'react-bootstrap/Spinner';
 import ReactTable from 'react-table';
 import { updateTicket } from '../api/ticketApi';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
@@ -8,28 +9,24 @@ import {authenticationService} from '../services/AuthenticationService';
 
 const AllTickets = () => {
   const [parkTickets, setParkTickets] = useState([]);
-  const [editParkTickets, setEditParkTickets] = useState([]);
-  const [editingTicket, setEditingTicket] = useState([]);
-  const [editMode, setEditMode] = useState(false);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     authenticationService.currentUser.subscribe(value => {
-      console.log(value);
       if (value != null) {
-        console.log(value);
-        setUser(value);
+        var tickets = {...value};
+        setUser(tickets);
+        getParkTickets(value["parkId"])
+          .then(result => {
+            setParkTickets(result);
+            setLoading(false);
+          });
+      }
+      else {
+        setLoading(true);
       }
     });
-    getParkTickets(3)
-      .then(result => {
-        result.forEach( row => {
-          row['editMode'] = false;
-        });
-        setParkTickets(result);
-        setEditingTicket(JSON.parse(JSON.stringify(result)));
-      });
-      
   }, []);
 
   const tableColumns = [
@@ -60,67 +57,52 @@ const AllTickets = () => {
     {
       Header: 'Checkout Task',
       Cell: row => (
-        parkTickets[row.index]["editMode"] ? 
-          <ButtonToolbar>
-              <Button variant="success" onClick={() => handleSave(row)} size="sm">Save </Button>
-              <Button variant="danger" onClick={() => handleCancel(row)} size="sm">Cancel</Button>
-          </ButtonToolbar>
+        parkTickets[row.index]["employeeUsername"] 
+        ? 
+          parkTickets[row.index]["employeeUsername"] === user["username"] 
+          ? 
+            <Button variant="danger" onClick={() => _handleUnassign(row)} size="sm">Unassign</Button> 
+          : 
+            <></> 
         :
           <ButtonToolbar>
-            <Button variant="primary" onClick={() => handleEdit(row)} disabled={editMode} size="sm">Edit</Button>
+            <Button variant="success" onClick={() => _handleAssign(row)} size="sm">Assign</Button>
           </ButtonToolbar>
       ),
       width: 200
    }
   ];
 
-  const handleChange = (rowIndex, employeeUsername) => event => {
-    editingTicket[rowIndex][employeeUsername] = event.target.value;
-    setEditingTicket(editingTicket);
-  };
-
-  const handleSave = (row) => {
-    updateTicket(parkTickets[row.index]["id"], parkTickets[row.index]).then(response => {
-      console.log("update ticket response", response);
+  const _handleUnassign = (row) => {
+    var assignTicket = {...parkTickets[row.index]};
+    assignTicket["employeeUsername"] = null;
+    updateTicket(parkTickets[row.index]["id"], assignTicket).then(response => {
+      const updatedTickets = JSON.parse(JSON.stringify(parkTickets));
+      updatedTickets[row.index] = assignTicket;
+      setParkTickets(updatedTickets);
     });
-    editingTicket[row.index]["editMode"] = false;
-    setParkTickets(JSON.parse(JSON.stringify(editingTicket)));
-    setEditMode(false);
-  }
-  
-  const handleCancel = (row) => {
-    editingTicket[row.index]["editMode"] = false;
-    parkTickets[row.index]["editMode"] = false;
-    setParkTickets([...parkTickets]);
-    setEditingTicket(editingTicket);
-    setEditMode(false);
   }
 
-    const handleEdit = (row) => {
-      var index = row.index;
-      let editParkTickets = JSON.parse(JSON.stringify(parkTickets));
-
-      editParkTickets[index]["employeeUsername"] = (
-            <Form>
-                <Form.Control defaultValue={parkTickets[index]["employeeUsername"]} 
-                              as="textarea" 
-                              placeholder="Employee Username" 
-                              defaultValue={parkTickets[index]["employeeNotes"]}
-                              onChange={handleChange(row.index, 'employeeUsername')}/>
-            </Form>
-        );
-        setEditParkTickets(editParkTickets);
-        setEditMode(true);
-        parkTickets[index]["editMode"] = true;
-        setParkTickets(parkTickets);
-        editingTicket[index]["editMode"] = true;
-        setEditingTicket(editingTicket);
-    }
-
+  const _handleAssign = (row) => {
+    var assignTicket = {...parkTickets[row.index]};
+    assignTicket["employeeUsername"] = user["username"];
+    updateTicket(parkTickets[row.index]["id"], assignTicket).then(response => {
+      const updatedTickets = JSON.parse(JSON.stringify(parkTickets));
+      updatedTickets[row.index] = assignTicket;
+      setParkTickets(updatedTickets);
+    });
+  }
 
   return (
+    loading 
+    ? 
+
+    <Spinner animation="border" role="status" variant="success" className="spinner">
+      <span className="sr-only">Loading...</span>
+    </Spinner>
+    :
     <div>
-      <ReactTable data={!editMode ? parkTickets : editParkTickets} columns={tableColumns}/>
+      <ReactTable data={parkTickets} columns={tableColumns}/>
     </div>
 
   );

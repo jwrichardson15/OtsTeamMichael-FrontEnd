@@ -4,9 +4,11 @@ import { getCategories } from '../api/categoryApi';
 import { getStatuses } from '../api/statusApi';
 import { updateTicket } from '../api/ticketApi';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Form from 'react-bootstrap/Form';
 import ReactTable from 'react-table';
+import {authenticationService} from '../services/AuthenticationService';
 
 const MyTickets = () => {
   const [employeeTickets, setEmployeeTickets] = useState([]);
@@ -15,16 +17,28 @@ const MyTickets = () => {
   const [categories, setCategories] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const [editMode, setEditMode] = useState(false);
-
+  const [user, setUser] = useState();
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getEmployeeTickets("stGar2332")
-      .then(result => {
-        result.forEach( row => {
-          row['editMode'] = false;
-        })
-        setEmployeeTickets(result);
-        setEditingTickets(JSON.parse(JSON.stringify(result)));
-      });
+    authenticationService.currentUser.subscribe(value => {
+      if (value != null) {
+        var tickets = {...value};
+        setUser(tickets);
+        getEmployeeTickets(value["username"])
+          .then(result => {
+            result.forEach( row => {
+              row['editMode'] = false;
+            })
+            setEmployeeTickets(result);
+            setEditingTickets(JSON.parse(JSON.stringify(result)));
+            setLoading(false);
+          });
+        
+      }
+      else {
+        setLoading(true);
+      }
+    });
     getCategories()
       .then(result => {
         setCategories(result);
@@ -34,6 +48,9 @@ const MyTickets = () => {
         setStatuses(result);
       });
   }, []);
+
+
+  
 
 
   const tableColumns = [
@@ -84,6 +101,7 @@ const MyTickets = () => {
       console.log("update ticket response", response);
     })
     editingTicket[row.index]["editMode"] = false;
+    console.log(editingTicket);
     setEmployeeTickets(JSON.parse(JSON.stringify(editingTicket)));
     setEditMode(false);
   }
@@ -97,7 +115,15 @@ const MyTickets = () => {
   }
 
   const _handleChange = (rowIndex, category) => event => {
+    // let editEmployeeTickets = JSON.parse(JSON.stringify(editingTicket));
     editingTicket[rowIndex][category] = event.target.value;
+    setEditingTickets(editingTicket);
+  }
+
+  const _handleDropdown = (rowIndex, categoryId, categoryName) => event => {
+    const selectedIndex = event.target.options.selectedIndex;
+    editingTicket[rowIndex][categoryId] = event.target.options[selectedIndex].getAttribute('data-id');
+    editingTicket[rowIndex][categoryName] = event.target.value;
     setEditingTickets(editingTicket);
   }
 
@@ -109,12 +135,12 @@ const MyTickets = () => {
           <Form.Group controlId="categorySelect" >
             <Form.Control 
               as="select" 
-              onChange={_handleChange(index, "categoryName")} 
+              onChange={_handleDropdown(index, "categoryId", "categoryName")} 
               defaultValue={employeeTickets[index]["categoryName"]} 
             >
               {
                 categories.map((value) => {
-                  return(<option key={value["id"]}>{value["name"]}</option>);
+                  return(<option key={value["id"]} data-id={value["id"]}>{value["name"]}</option>);
                 })
               }
             </Form.Control>
@@ -127,11 +153,11 @@ const MyTickets = () => {
           <Form.Group controlId="statusSelect">
             <Form.Control 
               as="select" 
-              onChange={_handleChange(index, "status")}
+              onChange={_handleDropdown(index, "statusId", "status")}
               defaultValue={employeeTickets[index]["status"]}>
               {
                 statuses.map((value) => {
-                  return(<option key={value["id"]}>{value["name"]}</option>);
+                  return(<option key={value["id"] }data-id={value["id"]}>{value["name"]}</option>);
                 })
               }
             </Form.Control>
@@ -168,10 +194,16 @@ const MyTickets = () => {
   }
 
   return (
+    loading 
+    ? 
+    <Spinner animation="border" role="status" variant="success" className="spinner">
+      <span className="sr-only">Loading...</span>
+    </Spinner>
+    :
     <div>
       <ReactTable data={!editMode ? employeeTickets : editEmployeeTickets} columns={tableColumns}/>
     </div>
-
+    
   );
 };
 
