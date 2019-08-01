@@ -2,18 +2,18 @@
 // Responses for tickets being created or failed
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Form } from 'react-bootstrap';
-import { getAllCategories } from '../api/categoriesApi';
-import { getAllParks } from '../api/parksApi';
-import { createTicket } from '../api/ticketsApi';
+import { getCategories } from '../api/categoryApi';
+import { getParks } from '../api/parkApi';
+import { createTicket } from '../api/ticketApi';
 
 const CreateTicket = () => {
 
   const [categoriesData, setCategoriesData] = useState([]);
   const [parksData, setParksData] = useState([]);
-  const [ticketData, setTicketData] = useState({"parkId": 0, "categoryId": 0, "email": "", description: ""});
+  const [ticketData, setTicketData] = useState({"parkId": 0, "categoryId": 0, "email": "", description: "", "statusId": 1});
 
   useEffect(() => {
-    getAllCategories()
+    getCategories()
       .then(categoriesDataResponse => {
         setCategoriesData(categoriesDataResponse);
         console.log(categoriesDataResponse);
@@ -24,7 +24,7 @@ const CreateTicket = () => {
   }, []);
 
   useEffect(() => {
-    getAllParks()
+    getParks()
       .then(parksDataResponse => {
         setParksData(parksDataResponse);
         console.log(parksDataResponse);
@@ -46,14 +46,14 @@ const CreateTicket = () => {
   };
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <h3>Create Ticket</h3>
       <Form.Row>
         <Form.Group as={Col} controlId="formCreateTicketPark">
           <Form.Label>Park</Form.Label>
           <Form.Control as="select" onChange={handleChange('parkId')} value={ticketData.park}>
             <option value="0">Select Park</option>
-            {parksData.map((value, index) => {return <option key={index} value={value.id}>{value.name}</option>})}
+            {parksData.map((value, index) => {return <option key={index} value={value.id}>{value.parkName}</option>})}
           </Form.Control>
         </Form.Group>
         <Form.Group as={Col} controlId="formCreateTicketCategory">
@@ -76,7 +76,7 @@ const CreateTicket = () => {
           <Form.Control as="textarea" rows="3" onChange={handleChange('description')} value={ticketData.description} />
         </Form.Group>
       </Form.Row>
-      <Button variant="primary" onClick={handleSubmit}>
+      <Button variant="primary" type="submit">
         Submit
       </Button>
     </Form>
