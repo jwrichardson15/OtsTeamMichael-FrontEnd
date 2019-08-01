@@ -4,15 +4,23 @@ import {Form, Button, InputGroup, FormControl} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import { updateTicket } from '../api/ticketApi';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
-
+import {authenticationService} from '../services/AuthenticationService';
 
 const AllTickets = () => {
   const [parkTickets, setParkTickets] = useState([]);
   const [editParkTickets, setEditParkTickets] = useState([]);
   const [editingTicket, setEditingTicket] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const [user, setUser] = useState();
 
   useEffect(() => {
+    authenticationService.currentUser.subscribe(value => {
+      console.log(value);
+      if (value != null) {
+        console.log(value);
+        setUser(value);
+      }
+    });
     getParkTickets(3)
       .then(result => {
         result.forEach( row => {
@@ -21,6 +29,7 @@ const AllTickets = () => {
         setParkTickets(result);
         setEditingTicket(JSON.parse(JSON.stringify(result)));
       });
+      
   }, []);
 
   const tableColumns = [
