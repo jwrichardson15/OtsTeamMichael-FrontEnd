@@ -12,10 +12,14 @@
 
 .App .body .sidebar {
   order: -1;
-  max-width: 14em;
-  flex-basis: 14em;
+  max-width: 12em;
+  flex-basis: 12em;
   box-shadow: inset rgba(0, 0, 0, .08) -1px 0 0;
+  background-color: rgb(157, 224, 141);
   padding-right: 1px;
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-bottom: 2%;
 }
 
 .App .body .content {
@@ -23,4 +27,37 @@
   flex-direction: column;
   flex-grow: 1;
   width: -webkit-fill-available;
+  padding-left: 4em;
+  padding-right: 4em;
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+a{
+    border-width: 25px;
+    border-color: black;
+    border-radius: 10%;
+}
+
+h3{
+  text-align: center;
+  padding-bottom: .5em;
+  
+}
+
+h6{
+  text-align: center;
+  padding-bottom: 2em;
+}
+
+.form{
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.createHeader{
+  padding: .5em;
+  margin-bottom: 1em;
+  background-color: rgb(180, 93, 93);
+  
 }

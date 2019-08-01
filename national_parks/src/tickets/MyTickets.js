@@ -17,7 +17,7 @@ const MyTickets = () => {
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    getEmployeeTickets("stGar2332")
+    getEmployeeTickets("eVaug521")
       .then(result => {
         result.forEach( row => {
           row['editMode'] = false;
@@ -169,6 +169,7 @@ const MyTickets = () => {
 
   return (
     <div>
+      <h3 className='createHeader'>Username Tickets</h3>
       <ReactTable data={!editMode ? employeeTickets : editEmployeeTickets} columns={tableColumns}/>
     </div>
 

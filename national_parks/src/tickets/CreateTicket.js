@@ -46,8 +46,9 @@ const CreateTicket = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <h3>Create Ticket</h3>
+    <Form className='form' onSubmit={handleSubmit}>
+      <h3 className='createHeader'>Create Ticket</h3>
+      <h6>Park Visitors! If you had any issues during your visit, please let us know by filling out this form.</h6>
       <Form.Row>
         <Form.Group as={Col} controlId="formCreateTicketPark">
           <Form.Label>Park</Form.Label>

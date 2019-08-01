@@ -82,6 +82,7 @@ const AllTickets = () => {
 
   return (
     <div>
+      <h3 className='createHeader'>Park Tickets</h3>
       <ReactTable data={parkTickets} columns={tableColumns}/>
     </div>
 
