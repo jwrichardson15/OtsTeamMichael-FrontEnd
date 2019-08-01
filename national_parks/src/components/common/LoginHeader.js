@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, OverlayTrigger, Popover, } from 'react-bootstrap';
 import Login from './Login';
 import { authenticationService } from '../../services/AuthenticationService';
+import { withRouter } from 'react-router-dom';
 
-const LoginHeader = () => {
+const LoginHeader = (props) => {
 
   // Function to call to set the loggedOut state in the component
   const [loggedOut, setLoggedOut] = useState(true);
@@ -12,11 +13,18 @@ const LoginHeader = () => {
   // Magic useEffect to set the loggedOut state from the AuthenticationService
   useEffect(() => {
     authenticationService.currentToken.subscribe(value => setLoggedOut(!value));
-    authenticationService.currentUser.subscribe(value => setName(value.fname + " " + value.lname));
+    authenticationService.currentUser.subscribe(value => doSetName(value));
   });
+
+  const doSetName = user => {
+    if (user != null) {
+      setName(user.fname + " " + user.lname);
+    }
+  }
 
   const doLogOut = () => {
     authenticationService.logout();
+    props.history.push('/');
   }
 
   const popover = (
@@ -43,4 +51,4 @@ const LoginHeader = () => {
   }
 };
 
-export default LoginHeader;
+export default withRouter(LoginHeader);
