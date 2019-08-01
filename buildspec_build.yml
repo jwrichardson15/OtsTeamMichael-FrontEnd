@@ -13,7 +13,7 @@ phases:
       - npm run build
 artifacts:
   files:
-    - './build/*'
+    - './national_parks/build/*'
 
 cache:
   paths:
