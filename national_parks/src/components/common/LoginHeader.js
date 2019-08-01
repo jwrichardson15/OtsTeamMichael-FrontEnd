@@ -8,10 +8,12 @@ const LoginHeader = (props) => {
 
   // Function to call to set the loggedOut state in the component
   const [loggedOut, setLoggedOut] = useState(true);
+  const [name, setName] = useState("");
 
   // Magic useEffect to set the loggedOut state from the AuthenticationService
   useEffect(() => {
     authenticationService.currentToken.subscribe(value => setLoggedOut(!value));
+    authenticationService.currentUser.subscribe(value => setName(value.fname + " " + value.lname));
   });
 
   const doLogOut = () => {
@@ -35,7 +37,10 @@ const LoginHeader = (props) => {
     );
   } else {
     return (
-      <Button variant="outline-success" onClick={doLogOut}>Logout</Button>
+      <React.Fragment>
+        <span className="mr-2">Welcome {name}!</span>
+        <Button variant="outline-success" onClick={doLogOut}>Logout</Button>
+      </React.Fragment>
     );
   }
 };
