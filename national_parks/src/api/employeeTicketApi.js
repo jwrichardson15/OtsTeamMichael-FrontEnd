@@ -5,12 +5,3 @@ export function getEmployeeTickets(username) {
     params: {username}
   }) .then (response => {console.log(response); return response.data});
 }
-
-
-// .get(`${API_URL}${url}`, {
-//   params: data,
-//   headers: {
-//     Authorization: getAuthorizationToken()
-//   }
-// })
-// .then(handleResponse);
