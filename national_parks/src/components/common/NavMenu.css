@@ -1,8 +1,8 @@
-.navbar-expand, .navbar-expand .navbar-nav {
+ .navbar-expand.navMenu, .navbar-expand.navMenu .navbar-nav {
   flex-direction: column !important;
-  align-items: flex-start;
+  /* align-items: flex-start; */
 }
 
-.navbar {
+.navbar.navMenu {
   align-items: flex-start !important;
 }
