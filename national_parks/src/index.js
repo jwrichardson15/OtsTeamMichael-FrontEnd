@@ -5,7 +5,9 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-import 'react-table/react-table.css'
+import 'react-table/react-table.css';
+import Favicon from 'react-favicon';
+
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

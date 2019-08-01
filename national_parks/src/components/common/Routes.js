@@ -4,9 +4,8 @@ import CreateTicket from '../../tickets/CreateTicket';
 import AllTickets from '../../tickets/AllTickets';
 import MyTickets from '../../tickets/MyTickets';
 import { authenticationService } from '../../services/AuthenticationService';
-import PropTypes from 'prop-types';
 
-const Routes = props => {
+const Routes = () => {
   const [userLoggedOut, setUserLoggedOut] = useState(true);
 
   useEffect(() => {
