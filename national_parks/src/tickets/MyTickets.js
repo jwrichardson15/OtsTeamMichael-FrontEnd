@@ -19,6 +19,7 @@ const MyTickets = () => {
   const [editMode, setEditMode] = useState(false);
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
+  
   useEffect(() => {
     authenticationService.currentUser.subscribe(value => {
       if (value != null) {
@@ -48,10 +49,6 @@ const MyTickets = () => {
         setStatuses(result);
       });
   }, []);
-
-
-  
-
 
   const tableColumns = [
     {
