@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export function createTicket(ticketBody) {
-  axios.post('/api/tickets', ticketBody).then(response => {return response.data});
+  return axios.post('/api/tickets', ticketBody).then(response => {return response.data});
 }
 
 export function updateTicket(ticketId, updatedTicket) {
