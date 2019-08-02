@@ -46,7 +46,7 @@ const CreateTicket = () => {
   const StatusAlert = ({status, statusText, setStatus}) => {
     if (["success", "warning", "danger"].includes(status)) {
       return (
-          <Alert variant={status} onClose={() => setStatus("")} dismissible>
+        <Alert variant={status} onClose={() => setStatus("")} dismissible>
           {statusText}
         </Alert>
       );
