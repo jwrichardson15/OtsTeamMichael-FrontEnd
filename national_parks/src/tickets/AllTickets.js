@@ -8,7 +8,7 @@ import { updateTicket } from '../api/ticketApi';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import {authenticationService} from '../services/AuthenticationService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faBan, faSave, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 import EditTicketModal from './EditTicketModal';
 
 
@@ -28,7 +28,6 @@ const AllTickets = () => {
         getParkTickets(value["parkId"])
           .then(result => {
             setParkTickets(result);
-            // setUpdatingTickets(JSON.parse(JSON.stringify(result)));
             setLoading(false);
           });
       }
@@ -43,7 +42,6 @@ const AllTickets = () => {
       accessor: 'id',
       Header: 'ID',
       width: 50
-      
     },
     {
       accessor: 'status',
@@ -55,7 +53,6 @@ const AllTickets = () => {
       accessor: 'categoryName',
       Header: 'Category',
       style: { 'whiteSpace': 'unset' },
-      
     },
     {
       accessor: 'dateCreated',
@@ -74,35 +71,53 @@ const AllTickets = () => {
             {
             parkTickets[row.index]["employeeUsername"] === user["username"] 
             ? 
-              <Button variant="danger" onClick={() => _handleUnassign(row)} size="sm">Unassign</Button> 
+              <Button variant="danger" onClick={() => _handleAssignment(false, row.index)} size="sm">Unassign</Button> 
             
           :
-            <Button variant="success" onClick={() => _handleAssign(row)} size="sm">Assign</Button>}
+            <Button variant="success" onClick={() => _handleAssignment(true, row.index)} size="sm">Assign</Button>}
         </ButtonToolbar>
       )
    }
   ];
 
-  const _handleAssign = (row) => {
-
+  const _handleAssignment = (assign, index) => {
+    var rowIndex = currentIndex;
+    if (index) {
+      rowIndex = index;
+    }
+    var assignTicket = {...parkTickets[rowIndex]};
+    assignTicket["employeeUsername"] = assign ? user["username"] : null;
+    updateTicket(parkTickets[rowIndex]["id"], assignTicket).then(response => {
+      const updatedTickets = JSON.parse(JSON.stringify(parkTickets));
+      updatedTickets[rowIndex] = assignTicket;
+      setParkTickets(updatedTickets);
+    });
   }
 
-  const _handleUnassign = (row) => {
-    
+  const _handleSave = (ticket) => {
+    updateTicket(ticket["id"], ticket);
+
+    let newParkTicket = JSON.parse(JSON.stringify(parkTickets));
+    newParkTicket[currentIndex] = ticket;
+    setParkTickets(newParkTicket);
+  }
+
+  const _handleCancel = (ticket) => {
+    let newParkTicket = JSON.parse(JSON.stringify(parkTickets));
+    newParkTicket[currentIndex] = ticket;
+    setParkTickets(newParkTicket);
+    return newParkTicket[currentIndex];
   }
 
   const _viewModal = (row) => {
     setViewModal(true);
     setCurrentIndex(row.index);
     setCurrentTicket(parkTickets[row.index]);
-    console.log(row.index);
-    console.log(parkTickets[row.index]);
   } 
 
   const _handleClose = () => {
     setViewModal(false);
   }
-
 
   return (
     loading 
@@ -114,7 +129,15 @@ const AllTickets = () => {
     <div>
       <h3 className='createHeader'>Park Tickets</h3>
       <ReactTable data={parkTickets} columns={tableColumns} filterable={true}/>
-      <EditTicketModal currentTicket={currentTicket} show={viewModal} hide={_handleClose}/>
+      <EditTicketModal 
+        currentTicket={currentTicket} 
+        show={viewModal} 
+        hide={_handleClose} 
+        onSave={_handleSave}
+        onCancel={_handleCancel}
+        user={user}
+        assignment={_handleAssignment}
+      />
       
     </div>
   );
