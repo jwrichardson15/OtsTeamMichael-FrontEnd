@@ -1,11 +1,8 @@
 import React, {useState, useEffect} from 'react';
-
-import PropTypes from 'prop-types';
 import './App.css';
 import NavMenu from './components/common/NavMenu';
 import {BrowserRouter} from 'react-router-dom';
 import Routes from './components/common/Routes';
-// import './App.css'
 import Header from './components/common/Header';
 import { authenticationService } from './services/AuthenticationService';
 
