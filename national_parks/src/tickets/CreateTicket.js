@@ -67,7 +67,8 @@ const CreateTicket = () => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    if (ticketData.parkId == "0" || ticketData.categoryId == "0") {
+    if (ticketData.parkId === "0" || ticketData.categoryId === "0" ||
+        ticketData.parkId === 0 || ticketData.categoryId === 0) {
       setFormStatus("warning");
       setFormText("A Park and Category MUST be specified.");
     } else {
