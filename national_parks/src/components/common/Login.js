@@ -9,10 +9,12 @@ const Login = () => {
   const [status, setStatus] = useState("");
 
   const LoginStatus = ({status}) => {
-    if (status == "loading") {
+    if (status === "loading") {
       return <span className="ml-2"><Spinner animation="border" size="sm"/></span>;
-    } else if (status == "error") {
+    } else if (status === "error") {
       return <span className="ml-2" style={{color: 'red'}}>Login Failed</span>;
+    } else if (status === "success") {
+      return <span className="ml-2" style={{color: 'green'}}>Login Successful</span>;
     }
     return null;
   }
@@ -23,6 +25,7 @@ const Login = () => {
     authenticationService.login(username, password).catch(() => {
       setStatus("error");
     });
+    setStatus("success");
   }
 
   const handleUsername = () => event => {
@@ -35,8 +38,12 @@ const Login = () => {
 
   return (
     <Form onSubmit={doLogin}>
-      <FormControl type="text" placeholder="Username" className="mr-sm-2" value={username} onChange={handleUsername()}/>
-      <FormControl type="password" placeholder="Password" className="mr-sm-2" value={password} onChange={handlePassword()} />
+      <Form.Group controlId="formLoginUsername">
+        <FormControl type="text" placeholder="Username" className="mr-sm-2" value={username} onChange={handleUsername()}/>
+      </Form.Group>
+      <Form.Group controlId="formLoginPassword">
+      <FormControl type="password" placeholder="Password" className="mr-sm-2" value={password} onChange={handlePassword()}/>
+      </Form.Group>
       <Button variant="outline-success" type="submit">Login</Button>
       <LoginStatus status={status} />
     </Form>
