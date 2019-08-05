@@ -9,11 +9,11 @@ const Login = () => {
   const [status, setStatus] = useState("");
 
   const LoginStatus = ({status}) => {
-    if (status == "loading") {
+    if (status === "loading") {
       return <span className="ml-2"><Spinner animation="border" size="sm"/></span>;
-    } else if (status == "error") {
+    } else if (status === "error") {
       return <span className="ml-2" style={{color: 'red'}}>Login Failed</span>;
-    } else if (status == "success") {
+    } else if (status === "success") {
       return <span className="ml-2" style={{color: 'green'}}>Login Successful</span>;
     }
     return null;
