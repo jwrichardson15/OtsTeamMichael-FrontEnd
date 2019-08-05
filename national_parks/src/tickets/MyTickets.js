@@ -1,197 +1,115 @@
 import React, {useState, useEffect} from 'react';
 import { getEmployeeTickets } from '../api/employeeTicketApi';
-import { getCategories } from '../api/categoryApi';
-import { getStatuses } from '../api/statusApi';
 import { updateTicket } from '../api/ticketApi';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
-import Form from 'react-bootstrap/Form';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 import ReactTable from 'react-table';
 import {authenticationService} from '../services/AuthenticationService';
+import EditTicketModal from './EditTicketModal';
 
 const MyTickets = () => {
   const [employeeTickets, setEmployeeTickets] = useState([]);
-  const [editingTicket, setEditingTickets] = useState([]);
-  const [editEmployeeTickets, setEditEmployeeTickets] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [statuses, setStatuses] = useState([]);
-  const [editMode, setEditMode] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [viewModal, setViewModal] = useState(false);
+  const [currentTicket, setCurrentTicket] = useState({});
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     authenticationService.currentUser.subscribe(value => {
       if (value != null) {
-        var tickets = {...value};
-        setUser(tickets);
+        var userValue = {...value};
+        setUser(userValue);
         getEmployeeTickets(value["username"])
           .then(result => {
-            result.forEach( row => {
-              row['editMode'] = false;
-            })
             setEmployeeTickets(result);
-            setEditingTickets(JSON.parse(JSON.stringify(result)));
             setLoading(false);
           });
-        
       }
       else {
         setLoading(true);
       }
     });
-    getCategories()
-      .then(result => {
-        setCategories(result);
-      });
-    getStatuses()
-      .then(result => {
-        setStatuses(result);
-      });
   }, []);
-
-
-  
-
 
   const tableColumns = [
     {
       accessor: 'id',
       Header: 'ID',
-      width: 100
-    }, 
-    {
-      accessor: 'categoryName',
-      Header: 'Category'
-    },  
+      width: 50
+    },
     {
       accessor: 'status',
-      Header: 'Status'
+      Header: 'Status',
+      width: 150,
+      style: { 'whiteSpace': 'unset' }
     },
     {
-      accessor: 'description',
-      Header: 'Description'
+      accessor: 'categoryName',
+      Header: 'Category',
+      style: { 'whiteSpace': 'unset' },
     },
     {
-      accessor: 'email',
-      Header: 'Client Email'
+      accessor: 'dateCreated',
+      Header: 'Date Created'
+      // Cell: props => <span className='number'>{props.value.toLocale}</span>
     },
     {
-      accessor: 'employeeNotes',
-      Header: 'Notes'
+      accessor: 'employeeUsername',
+      Header: 'Assigned To:',
     },
     {
-      Header: '',
-      width: 200,
+      Header: 'Edit Task',
       Cell: row => (
-        employeeTickets[row.index]["editMode"] ? 
-          <ButtonToolbar>
-              <Button variant="success" onClick={() => _handleSave(row)} size="sm">Save </Button>
-              <Button variant="danger" onClick={() => _handleCancle(row)} size="sm">Cancel</Button>
-          </ButtonToolbar>
-        :
-          <ButtonToolbar>
-            <Button variant="primary" onClick={() => _handleEdit(row)} disabled={editMode} size="sm">Edit</Button>
-          </ButtonToolbar>
+        <ButtonToolbar>
+            <Button size="sm" onClick={() => _viewModal(row)}><FontAwesomeIcon icon={faEye}/></Button> 
+            <Button variant="danger" onClick={() => _handleAssignment(false, row.index)} size="sm">Unassign</Button>
+        </ButtonToolbar>
       )
-    }  
+   }
   ];
 
-  const _handleSave = (row) => {
-    updateTicket(editingTicket[row.index]["id"], editingTicket[row.index]).then(response => {
-      console.log("update ticket response", response);
-    })
-    editingTicket[row.index]["editMode"] = false;
-    console.log(editingTicket);
-    setEmployeeTickets(JSON.parse(JSON.stringify(editingTicket)));
-    setEditMode(false);
+  const _handleAssignment = (assign, index) => {
+    var rowIndex = currentIndex;
+    if (index) {
+      rowIndex = index;
+    }
+    var assignTicket = {...employeeTickets[rowIndex]};
+    assignTicket["employeeUsername"] = assign ? user["username"] : null;
+    updateTicket(employeeTickets[rowIndex]["id"], assignTicket).then(response => {
+      const updatedTickets = JSON.parse(JSON.stringify(employeeTickets));
+      updatedTickets.splice(rowIndex, 1)
+      setEmployeeTickets(updatedTickets);
+    });
   }
 
-  const _handleCancle = (row) => {
-    editingTicket[row.index]["editMode"] = false;
-    employeeTickets[row.index]["editMode"] = false;
-    setEmployeeTickets([...employeeTickets]);
-    setEditingTickets(editingTicket);
-    setEditMode(false);
+  const _handleSave = (ticket) => {
+    updateTicket(ticket["id"], ticket);
+    let newEmployeeTicket = JSON.parse(JSON.stringify(employeeTickets));
+    newEmployeeTicket[currentIndex] = ticket;
+    setEmployeeTickets(newEmployeeTicket);
   }
 
-  const _handleChange = (rowIndex, category) => event => {
-    // let editEmployeeTickets = JSON.parse(JSON.stringify(editingTicket));
-    editingTicket[rowIndex][category] = event.target.value;
-    setEditingTickets(editingTicket);
+  const _handleCancel = (ticket) => {
+    let newEmployeeTicket = JSON.parse(JSON.stringify(employeeTickets));
+    newEmployeeTicket[currentIndex] = ticket;
+    setEmployeeTickets(newEmployeeTicket);
+    return newEmployeeTicket[currentIndex];
   }
 
-  const _handleDropdown = (rowIndex, categoryId, categoryName) => event => {
-    const selectedIndex = event.target.options.selectedIndex;
-    editingTicket[rowIndex][categoryId] = event.target.options[selectedIndex].getAttribute('data-id');
-    editingTicket[rowIndex][categoryName] = event.target.value;
-    setEditingTickets(editingTicket);
+  const _viewModal = (row) => {
+    setViewModal(true);
+    setCurrentIndex(row.index);
+    setCurrentTicket(employeeTickets[row.index]);
+  } 
+
+  const _handleClose = () => {
+    setViewModal(false);
   }
 
-  const _handleEdit = (row) => {
-      let editEmployeeTickets = JSON.parse(JSON.stringify(employeeTickets));
-      var index = row.index;
-      editEmployeeTickets[index]["categoryName"] = (
-        <Form>
-          <Form.Group controlId="categorySelect" >
-            <Form.Control 
-              as="select" 
-              onChange={_handleDropdown(index, "categoryId", "categoryName")} 
-              defaultValue={employeeTickets[index]["categoryName"]} 
-            >
-              {
-                categories.map((value) => {
-                  return(<option key={value["id"]} data-id={value["id"]}>{value["name"]}</option>);
-                })
-              }
-            </Form.Control>
-          </Form.Group>
-        </Form> 
-      );
-
-      editEmployeeTickets[index]["status"] = (
-        <Form>
-          <Form.Group controlId="statusSelect">
-            <Form.Control 
-              as="select" 
-              onChange={_handleDropdown(index, "statusId", "status")}
-              defaultValue={employeeTickets[index]["status"]}>
-              {
-                statuses.map((value) => {
-                  return(<option key={value["id"] }data-id={value["id"]}>{value["name"]}</option>);
-                })
-              }
-            </Form.Control>
-          </Form.Group>
-        </Form>
-      );
-
-      editEmployeeTickets[index]["description"] = (
-        <Form>
-          <Form.Control 
-            onChange={_handleChange(row.index, "description")}
-            defaultValue={employeeTickets[row.index]["description"]} 
-          />
-        </Form> 
-      );  
-
-      editEmployeeTickets[index]["employeeNotes"] = (
-        <Form>
-          <Form.Control 
-            as="textarea" rows="3" 
-            onChange={_handleChange(index, "employeeNotes")}
-            defaultValue={employeeTickets[index]["employeeNotes"]} 
-          />
-        </Form> 
-      );
-      
-      setEditEmployeeTickets(editEmployeeTickets);
-      setEditMode(true);
-      employeeTickets[index]["editMode"] = true;
-      setEmployeeTickets(employeeTickets);
-      editingTicket[index]["editMode"] = true;
-      setEditingTickets(editingTicket);
-
-  }
 
   return (
     loading 
@@ -202,14 +120,18 @@ const MyTickets = () => {
     :
     <div>
       <h3 className='createHeader'>Username Tickets</h3>
-      <ReactTable data={!editMode ? employeeTickets : editEmployeeTickets} columns={tableColumns}/>
+      <ReactTable data={employeeTickets} columns={tableColumns} filterable={true}/>
+      <EditTicketModal 
+        currentTicket={currentTicket}
+        show={viewModal}
+        hide={_handleClose} 
+        onSave={_handleSave}
+        onCancel={_handleCancel}
+        user={user}
+        assignment={_handleAssignment}
+      />
     </div>
-    
   );
-};
+}
 
 export default MyTickets;
-
-
-
-  
