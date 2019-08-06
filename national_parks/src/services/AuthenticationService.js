@@ -25,7 +25,7 @@ function me(token) {
       localStorage.setItem('token', token);
       tokenSubject.next(token);
       localStorage.setItem('user', JSON.stringify(user));
-      tokenSubject.next(user);
+      userSubject.next(user);
     });
 }
 
