@@ -14,15 +14,32 @@ export const authenticationService = {
   get user() { return userSubject.value }
 };
 
+// Actually set the values in me, so they all are set together
+function me(token) {
+  return axios.get('/api/employee/me',
+                   {headers: {
+                     'Authorization': 'Bearer ' + token,
+                   }})
+    .then(response => {return response.data})
+    .then((user) => {
+      localStorage.setItem('token', token);
+      tokenSubject.next(token);
+      localStorage.setItem('user', JSON.stringify(user));
+      tokenSubject.next(user);
+    });
+}
+
 // Need to handle failures here
 function login(username, password) {
-  return axios.post('/api/auth/login', {"username": username, "password": password})
-    .then(handleResponse)
-    .then(({token, user}) => {
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
-      tokenSubject.next(token);
-      userSubject.next(user);
+  const data = new FormData();
+
+  data.append('username', username);
+  data.append('password', password);
+
+  return axios.post('/api/authenticate', data)
+    .then(grabToken)
+    .then((token) => {
+      me(token);
     });
 }
 
@@ -34,9 +51,7 @@ function logout() {
   userSubject.next(null);
 }
 
-// Probably could use some error handling here
-function handleResponse(response) {
+function grabToken (response) {
   let token = response.headers.authorization.split(" ")[1];
-  let user = response.data;
-  return {token, user};
+  return token;
 }

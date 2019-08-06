@@ -155,26 +155,30 @@ const EditTicketModal = (props) => {
                   />
                 </Col>
                 <Col>
-                  <Form.Label>Employee Username</Form.Label>
-                  <Form.Control
-                    value={editingTicket["employeeUsername"] || ''}
-                    disabled={true}
-                  />
+                  <Form.Group controlId="editTicketModalEmployeeUsername">
+                    <Form.Label>Employee Username</Form.Label>
+                    <Form.Control
+                      value={editingTicket["employeeUsername"] || ''}
+                      disabled={true}
+                    />
+                  </Form.Group>
                   {props.currentTicket["employeeUsername"] === props.user["username"] 
             ? 
-              <Button variant="danger" onClick={() => {_handleAssignment(false)}} size="sm">Unassign</Button> 
+              <Button variant="danger" id="assignButton" onClick={() => {_handleAssignment(false)}} size="sm">Unassign</Button> 
           :
-            <Button variant="success"  onClick={() => {_handleAssignment(true)}} size="sm">Assign</Button>}
+            <Button variant="success" id="assignButton" onClick={() => {_handleAssignment(true)}} size="sm">Assign</Button>}
                 </Col>
               </Row>
               <Row>
                 <Col>
-                  <Form.Label>Notes</Form.Label>
-                  <Form.Control
-                    value={editingTicket["employeeNotes"] || ''}
-                    disabled={!editMode}
-                    onChange={_handleChange("employeeNotes")}
-                  />
+                  <Form.Group>
+                    <Form.Label>Notes</Form.Label>
+                    <Form.Control
+                      value={editingTicket["employeeNotes"] || ''}
+                      disabled={!editMode}
+                      onChange={_handleChange("employeeNotes")}
+                    />
+                  </Form.Group>
                 </Col>
               </Row>
             </Form>

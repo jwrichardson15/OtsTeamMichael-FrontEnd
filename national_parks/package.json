@@ -51,6 +51,7 @@
   },
   "jest": {
     "coverageReporters": [
+      "html",
       "text"
     ]
   }
