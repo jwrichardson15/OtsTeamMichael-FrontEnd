@@ -7,7 +7,7 @@ import './NavMenu.css';
 const NavMenu = () => {
   return (
     <Navbar className="navMenu">
-        <Navbar.Brand>NavBar</Navbar.Brand>
+
         <Nav>
           <Nav.Item>
             <Nav.Link className="navLink" as={NavLink} to="/all-tickets">All Tickets</Nav.Link>
@@ -17,6 +17,9 @@ const NavMenu = () => {
           </Nav.Item>
           <Nav.Item>
             <Nav.Link className="navLink" as={NavLink} to="/create-ticket">Create Ticket</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link className="navLink" as={NavLink} to="/statistics">Park Statistics</Nav.Link>
           </Nav.Item>
         </Nav>
     </Navbar>

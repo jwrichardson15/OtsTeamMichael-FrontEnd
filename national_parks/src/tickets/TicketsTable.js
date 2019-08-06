@@ -12,6 +12,7 @@ import { authenticationService } from '../services/AuthenticationService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import EditTicketModal from './EditTicketModal';
+import './EditTicketModal.css';
 
 const TicketsTable = (props) => {
   const [tickets, setTickets] = useState([]);
@@ -43,6 +44,7 @@ const TicketsTable = (props) => {
             setLoading(false);
           });
         }
+        
         getStatuses()
         .then(result => {
           setStatuses(result);
@@ -118,20 +120,22 @@ const TicketsTable = (props) => {
     },
     {
       accessor: 'employeeUsername',
-      Header: 'Assigned To:',
+      Header: 'Assigned Employee',
     },
     {
-      Header: 'Edit Task',
+      Header: 'View/Edit',
+      width:150,
+      filterable: false,
       Cell: row => (
         <ButtonToolbar>
-            <Button size="sm" onClick={() => _viewModal(row)}><FontAwesomeIcon icon={faEye}/></Button> 
+            <Button size="sm" className="tableButton" onClick={() => _viewModal(row)}><FontAwesomeIcon icon={faEye}/></Button> 
             {
             tickets[row.index]["employeeUsername"] === user["username"] 
             ? 
-              <Button variant="danger" onClick={() => _handleAssignment(false, row.index)} size="sm">Unassign</Button> 
+              <Button variant="danger" className="tableButton" onClick={() => _handleAssignment(false, row.index)} size="sm">Unassign</Button> 
             
           :
-            <Button variant="success" onClick={() => _handleAssignment(true, row.index)} size="sm">Assign</Button>}
+            <Button variant="success" className="tableButton" onClick={() => _handleAssignment(true, row.index)} size="sm">Assign</Button>}
         </ButtonToolbar>
       )
    }
@@ -199,7 +203,7 @@ const TicketsTable = (props) => {
         }
 
       </h3>
-      <ReactTable data={tickets} columns={tableColumns} filterable={true}/>
+      <ReactTable data={tickets} columns={tableColumns} filterable={true} defaultPageSize={10} />
       <EditTicketModal 
         currentTicket={currentTicket} 
         show={viewModal} 

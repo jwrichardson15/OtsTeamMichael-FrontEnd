@@ -94,7 +94,7 @@ const EditTicketModal = (props) => {
                     <Button size="sm" onClick={() => _handleEdit()} variant="primary"><FontAwesomeIcon icon={faEdit} /></Button>
                     :
                     <> <Button size="sm" onClick={() => _handleSave()} variant="success"><FontAwesomeIcon icon={faSave} /></Button>
-                    <Button size="sm" onClick={() => _handleCancel()} variant="danger"><FontAwesomeIcon icon={faBan} /></Button> </>
+                    <Button size="sm"  onClick={() => _handleCancel()} variant="danger"><FontAwesomeIcon icon={faBan} /></Button> </>
                   }
                   </ButtonToolbar>
                 </Col>

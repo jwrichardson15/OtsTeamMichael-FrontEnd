@@ -2,6 +2,7 @@
   min-height: 100vh; 
   display: flex;
   flex-direction: column;
+
 }
 
 .App .body {
@@ -18,7 +19,7 @@
   background-color: rgb(255, 255, 255);
   padding-right: 1px;
   margin-top: 2%;
-  margin-left: 2%;
+  /* margin-left: 2%; */
   margin-bottom: 2%;
   /* border-style: solid; */
   /* border-width: 2px; */
@@ -68,4 +69,25 @@ h6{
   position: fixed;
   top: 50%;
   left: 50%;
+}
+
+.ReactTable {
+  background-color: #888d94;
+  color: #fff;
+  border:2px solid #abb1b9;
+}
+
+.ReactTable .rt-tbody .rt-tr-group {
+  border: 1px solid #abb1b9;
+}
+
+.ReactTable .-pagination .-previous, .ReactTable .-pagination .-next {
+  background-color: #fff;
+  
+}
+
+.ReactTable .-pagination .-btn {
+  background: rgb(0,0,0,0) !important;
+  color: black !important;
+  
 }

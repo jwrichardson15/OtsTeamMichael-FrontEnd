@@ -3,6 +3,7 @@ import {Switch, Route} from 'react-router-dom';
 import CreateTicket from '../../tickets/CreateTicket';
 import TicketsTable from '../../tickets/TicketsTable';
 import { authenticationService } from '../../services/AuthenticationService';
+import Statistics from '../../statistics/Statistics';
 
 const Routes = () => {
   const [userLoggedOut, setUserLoggedOut] = useState(true);
@@ -19,10 +20,11 @@ const Routes = () => {
         </Switch>
       :
       <Switch>
-        <Route exact path='/' component={TicketsTable}/>
-        <Route exact path='/all-tickets' render={() => <TicketsTable type="park" />} />
+        <Route exact path='/' render={() => <TicketsTable type="park" />}/>
+        <Route path='/all-tickets' render={() => <TicketsTable type="park" />} />
         <Route path='/my-tickets' render={() => <TicketsTable type="employee" />}/>
         <Route exact path='/create-ticket' component={CreateTicket} /> 
+        <Route path='/statistics' component={Statistics} /> 
         </Switch> 
       }
       </>
