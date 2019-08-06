@@ -9,7 +9,7 @@ import { getStatuses } from '../api/statusApi';
 import { getParks } from '../api/parkApi';
 import { getParkTickets } from '../api/employeeTicketApi';
 import ReactTable from 'react-table';
-import { Table } from 'react-bootstrap';
+import { Table, Card } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2';
 import './Statistics.css';
 
@@ -258,7 +258,7 @@ const Statistics = () => {
     <Container>
       <Row className="statisticRows">
         <Col md={6} style={{"paddingLeft" : "0px"}}>
-          <Form.Label >Select a Park</Form.Label>
+          <Form.Label style={{fontSize:"140%"}}>Select a Park</Form.Label>
           <Form.Control
             as={"select"}
             value={selectedPark["parkName"]}
@@ -275,16 +275,16 @@ const Statistics = () => {
 
       <Row className="statisticRows">
         <Col md={6}>
-          <Row className="statisticRows">
+          <Row>
             <Col style={{"paddingLeft" : "0px"}}>
-              <h4>Status Statistics</h4>
+              <h4>Ticket Status</h4>
             </Col>
           </Row>
           <Row>
-            <Table bordered style={{width:"80%"}}>
+            <Table bordered style={{width:"80%", backgroundColor: "white"}}>
               <thead>
-                <tr>
-                  <th>Ticket Status</th>
+                <tr> 
+                  <th>Status</th>
                   <th>Count</th>
                 </tr>
               </thead>
@@ -313,7 +313,7 @@ const Statistics = () => {
         </Col>
         <Col md={6}>
           <Row className="statisticRows">
-            <Col ><h4>Category Statistics</h4></Col>
+            <Col style={{"padding" : "0px"}}><h4>Category Breakdown</h4></Col>
           </Row>
           <Row>
             {chartData["category"]["labels"].length === 0 
