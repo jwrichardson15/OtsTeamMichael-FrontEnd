@@ -7,7 +7,7 @@ import LoginHeader from './LoginHeader';
 
 const Header = () => {
   return (
-    <Navbar bg="light" className="Header">
+    <Navbar bg="light" className="Header" expand="md">
       <Navbar.Brand>
       <img
         src={nps}
@@ -19,7 +19,7 @@ const Header = () => {
         {' National Parks Service'}
         
       </Navbar.Brand>
-
+      <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
         <LoginHeader />
       </Navbar.Collapse>
