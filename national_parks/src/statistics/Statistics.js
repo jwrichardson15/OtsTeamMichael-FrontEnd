@@ -257,7 +257,7 @@ const Statistics = () => {
     <h3>{selectedPark["parkName"]} Statistics</h3>
     <Container>
       <Row className="statisticRows">
-        <Col md={6} style={{"paddingLeft" : "0px"}}>
+        <Col md={6} style={{paddingLeft : "0px"}}>
           <Form.Label style={{fontSize:"140%"}}>Select a Park</Form.Label>
           <Form.Control
             as={"select"}
@@ -276,8 +276,8 @@ const Statistics = () => {
       <Row className="statisticRows">
         <Col md={6}>
           <Row>
-            <Col style={{"paddingLeft" : "0px"}}>
-              <h4>Ticket Status</h4>
+            <Col style={{paddingLeft : "0px"}}>
+              <h4 style={{paddingBottom:"2%"}}>Ticket Status</h4>
             </Col>
           </Row>
           <Row>
@@ -312,13 +312,13 @@ const Statistics = () => {
           </Row>
         </Col>
         <Col md={6}>
-          <Row className="statisticRows">
-            <Col style={{"padding" : "0px"}}><h4>Category Breakdown</h4></Col>
+          <Row>
+            <Col style={{padding : "0px"}}><h4 style={{paddingLeft: "10%", paddingBottom:"2%"}}>Category Breakdown</h4></Col>
           </Row>
           <Row>
             {chartData["category"]["labels"].length === 0 
             ? 
-              <h5>No Current Data</h5> 
+              <h5 style={{padding:"10%"}}>No Current Data</h5> 
             : 
               <Doughnut options={{ responsive: true }} data={chartData["category"]} options={options} />
             }
@@ -327,8 +327,8 @@ const Statistics = () => {
       </Row>
       
       <Row className="statisticRows">
-        <Col style={{"padding" : "0px"}}>
-          <h4>History</h4>
+        <Col style={{padding : "0px"}}>
+          <h4 style={{paddingBottom:"1%"}}>History</h4>
           <ReactTable 
             data={groupedTickets[selectedPark["parkId"]]} 
             columns={tableColumns} 
