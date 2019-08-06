@@ -1,5 +1,3 @@
-// Still needed:
-// Responses for tickets being created or failed
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
 import { getCategories } from '../api/categoryApi';
@@ -89,14 +87,14 @@ const CreateTicket = () => {
         <h3 className='createHeader'>Create Ticket</h3>
         <h6>Park Visitors! If you had any issues during your visit, please let us know by filling out this form.</h6>
         <Form.Row>
-          <Form.Group as={Col} controlId="formCreateTicketPark">
+          <Form.Group as={Col} xs={12} md={6} controlId="formCreateTicketPark">
             <Form.Label>Park</Form.Label>
             <Form.Control as="select" onChange={handleChange('parkId')} value={ticketData.parkId}>
               <option value="0">Select Park</option>
               {parksData.map((value, index) => {return <option key={index} value={value.id}>{value.parkName}</option>})}
             </Form.Control>
           </Form.Group>
-          <Form.Group as={Col} controlId="formCreateTicketCategory">
+          <Form.Group as={Col} xs={12} md={6} controlId="formCreateTicketCategory">
             <Form.Label>Category</Form.Label>
             <Form.Control as="select" onChange={handleChange('categoryId')} value={ticketData.categoryId}>
               <option value="0">Select Category</option>
