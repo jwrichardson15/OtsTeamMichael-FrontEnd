@@ -44,7 +44,7 @@ const Login = () => {
       <Form.Group controlId="formLoginPassword">
       <FormControl type="password" placeholder="Password" className="mr-sm-2" value={password} onChange={handlePassword()}/>
       </Form.Group>
-      <Button variant="outline-success" type="submit">Login</Button>
+      <Button variant="outline-dark" type="submit">Login</Button>
       <LoginStatus status={status} />
     </Form>
   );

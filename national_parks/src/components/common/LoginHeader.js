@@ -38,14 +38,14 @@ const LoginHeader = (props) => {
   if (loggedOut) {
     return (
       <OverlayTrigger trigger="click" placement="bottom" overlay={popover} rootClose={true}>
-        <Button variant="success">Employee Login</Button>
+        <Button variant="dark">Employee Login</Button>
       </OverlayTrigger>
     );
   } else {
     return (
       <React.Fragment>
         <span className="mr-2">Welcome {name}!</span>
-        <Button variant="outline-success" onClick={doLogOut}>Logout</Button>
+        <Button variant="outline-dark" onClick={doLogOut}>Logout</Button>
       </React.Fragment>
     );
   }

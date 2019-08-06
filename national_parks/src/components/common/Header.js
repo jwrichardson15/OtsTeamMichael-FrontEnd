@@ -1,8 +1,8 @@
 import React from 'react';
 import "./Header.css";
 import nps from '../../images/nps.png';
-import { Button, Navbar, OverlayTrigger} from 'react-bootstrap';
-import Login from './Login';
+import { Navbar} from 'react-bootstrap';
+// import Login from './Login';
 import LoginHeader from './LoginHeader';
 
 const Header = () => {
