@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Col, Form } from 'react-bootstrap';
+import { Alert, Button, Card, Col, Form } from 'react-bootstrap';
 import { getCategories } from '../api/categoryApi';
 import { getParks } from '../api/parkApi';
 import { createTicket } from '../api/ticketApi';
@@ -81,44 +81,46 @@ const CreateTicket = () => {
   };
 
   return (
-    <React.Fragment>
-      <StatusAlert status={formStatus} statusText={formText} setStatus={setFormStatus}/>
-      <Form className='form' onSubmit={handleSubmit}>
+    <Card as={Col} sm={{ span: 10, offset: 1 }} md={{ span: 8, offset: 2 }}>
+      <Card.Body>
         <h3 className='createHeader'>Create Ticket</h3>
         <h6>Park Visitors! If you had any issues during your visit, please let us know by filling out this form.</h6>
-        <Form.Row>
-          <Form.Group as={Col} xs={12} md={6} controlId="formCreateTicketPark">
-            <Form.Label>Park</Form.Label>
-            <Form.Control as="select" onChange={handleChange('parkId')} value={ticketData.parkId}>
-              <option value="0">Select Park</option>
-              {parksData.map((value, index) => {return <option key={index} value={value.id}>{value.parkName}</option>})}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group as={Col} xs={12} md={6} controlId="formCreateTicketCategory">
-            <Form.Label>Category</Form.Label>
-            <Form.Control as="select" onChange={handleChange('categoryId')} value={ticketData.categoryId}>
-              <option value="0">Select Category</option>
-              {categoriesData.map((value, index) => {return <option key={index} value={value.id}>{value.name}</option>})}
-            </Form.Control>
-          </Form.Group>
-        </Form.Row>
-        <Form.Row>
-          <Form.Group as={Col} controlId="formCreateTicketEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" onChange={handleChange('email')} value={ticketData.email} />
-          </Form.Group>
-        </Form.Row>
-        <Form.Row>
-          <Form.Group as={Col} controlId="formCreateTicketDescription">
-            <Form.Label>Description</Form.Label>
-            <Form.Control as="textarea" rows="3" onChange={handleChange('description')} value={ticketData.description} />
-          </Form.Group>
-        </Form.Row>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-    </React.Fragment>
+        <StatusAlert status={formStatus} statusText={formText} setStatus={setFormStatus}/>
+        <Form className='form' onSubmit={handleSubmit}>
+          <Form.Row>
+            <Form.Group as={Col} xs={12} md={6} controlId="formCreateTicketPark">
+              <Form.Label>Park</Form.Label>
+              <Form.Control as="select" onChange={handleChange('parkId')} value={ticketData.parkId}>
+                <option value="0">Select Park</option>
+                {parksData.map((value, index) => {return <option key={index} value={value.id}>{value.parkName}</option>})}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group as={Col} xs={12} md={6} controlId="formCreateTicketCategory">
+              <Form.Label>Category</Form.Label>
+              <Form.Control as="select" onChange={handleChange('categoryId')} value={ticketData.categoryId}>
+                <option value="0">Select Category</option>
+                {categoriesData.map((value, index) => {return <option key={index} value={value.id}>{value.name}</option>})}
+              </Form.Control>
+            </Form.Group>
+          </Form.Row>
+          <Form.Row>
+            <Form.Group as={Col} controlId="formCreateTicketEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control type="email" placeholder="Enter email" onChange={handleChange('email')} value={ticketData.email} />
+            </Form.Group>
+          </Form.Row>
+          <Form.Row>
+            <Form.Group as={Col} controlId="formCreateTicketDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control as="textarea" rows="3" onChange={handleChange('description')} value={ticketData.description} />
+            </Form.Group>
+          </Form.Row>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+      </Card.Body>
+    </Card>
   );
 };
 
