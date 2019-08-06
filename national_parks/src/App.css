@@ -2,13 +2,18 @@
   min-height: 100vh; 
   display: flex;
   flex-direction: column;
-
+  font-family: 'Nunito', sans-serif;
 }
 
 .App .body {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
+  background: url(./images/glacier-national-park.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 .App .body .sidebar {
@@ -18,12 +23,6 @@
   box-shadow: inset rgba(0, 0, 0, .08) -1px 0 0;
   background-color: rgb(255, 255, 255);
   padding-right: 1px;
-  margin-top: 2%;
-  /* margin-left: 2%; */
-  margin-bottom: 2%;
-  /* border-style: solid; */
-  /* border-width: 2px; */
-  /* border-radius: 15px; */
 }
 
 .App .body .content {
@@ -33,7 +32,7 @@
   width: -webkit-fill-available;
   padding-left: 4em;
   padding-right: 4em;
-  padding-top: 2em;
+  padding-top: 3em;
   padding-bottom: 2em;
 }
 
@@ -62,6 +61,7 @@ h6{
 .createHeader{
   padding: .5em;
   margin-bottom: 1em;
+  font-family: 'Barlow Semi Condensed', sans-serif;
   /* background-color: rgb(180, 93, 93); */
   
 }
@@ -72,9 +72,10 @@ h6{
 }
 
 .ReactTable {
-  background-color: #888d94;
+  background-color:rgba(136,141,148,.9);
   color: #fff;
   border:2px solid #abb1b9;
+  font-size: 105%;
 }
 
 .ReactTable .rt-tbody .rt-tr-group {
@@ -90,4 +91,11 @@ h6{
   background: rgb(0,0,0,0) !important;
   color: black !important;
   
+}
+
+.card{
+  margin-top: 4%;
+  padding-left: 4%;
+  padding-right: 4%;
+  padding-bottom: 6%;
 }

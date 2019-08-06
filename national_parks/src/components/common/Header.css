@@ -1,3 +1,9 @@
-.Header.navbar{
+.Header.navbar {
   background-color: #6899BA !important;
 }
+
+.HeaderTitle{
+  padding-left: 10%;
+}
+
+
