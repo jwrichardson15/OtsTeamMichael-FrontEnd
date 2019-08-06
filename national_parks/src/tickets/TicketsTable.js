@@ -4,6 +4,7 @@ import { getEmployeeTickets } from '../api/employeeTicketApi';
 import { getCategories } from '../api/categoryApi';
 import { getStatuses } from '../api/statusApi';
 import { updateTicket } from '../api/ticketApi';
+import { getEmployees } from '../api/employeeApi';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
@@ -23,25 +24,34 @@ const TicketsTable = (props) => {
   const [currentTicket, setCurrentTicket] = useState({});
   const [statuses, setStatuses] = useState([]);
   const [categories, setCategories] = useState([]);
-
+  const [changePage, setChangePage] = useState(true);
+  const [employees, setEmployees] = useState([]);
+  const [employeeFilter, setEmployeeFilter] = useState(false);
   useEffect(() => {
     authenticationService.currentUser.subscribe(value => {
       if (value != null) {
         var userValue = {...value};
         setUser(userValue);
-        console.log(userValue);
+        
         if (props.type === "park") {
+          setChangePage(true);
           getParkTickets(value["parkId"])
           .then(result => {
             setTickets(result);
             setLoading(false);
+            setChangePage(false);
+            setEmployeeFilter(true);
           });
         }
         else if (props.type === "employee") {
+          // setLoading(true);
+          setChangePage(true);
           getEmployeeTickets(value["username"])
           .then(result => {
             setTickets(result);
             setLoading(false);
+            setChangePage(false);
+            setEmployeeFilter(false);
           });
         }
         
@@ -53,9 +63,14 @@ const TicketsTable = (props) => {
         .then(result => {
           setCategories(result);
         });
+        getEmployees()
+        .then(result => {
+          setEmployees(result);
+        });
       }
       else {
         setLoading(true);
+        setChangePage(true);
       }
     });
   }, [props.type]);
@@ -77,41 +92,54 @@ const TicketsTable = (props) => {
         }
         return row[filter.id] === filter.value;
       },
-      Filter: ({filter, onChange}) => 
-        <select
-          onChange={event => onChange(event.target.value)}
-          style={{width: "100%"}}
-          value={filter ? filter.value : "all"}
-        >
-          <option value="all">All</option>
-          { statuses.map((value) => {
-              return(<option value={value["name"]} key={value["id"]}>{value["name"]}</option>);
-            } ) 
-          }
-        </select>
+      Filter: ({filter, onChange}) => {
+        if (changePage && filter) {
+          filter.value = "all";
+        }
+        return (
+          <select
+            onChange={event => onChange(event.target.value)}
+            style={{width: "100%"}}
+            value={filter ? filter.value : "all"}
+          >
+            <option value="all">All</option>
+            { statuses.map((value) => {
+                return(<option value={value["name"]} key={value["id"]}>{value["name"]}</option>);
+              } ) 
+            }
+          </select>
+        );
+      }
     },
     {
       accessor: 'categoryName',
       Header: 'Category',
       style: { 'whiteSpace': 'unset' },
+      
       filterMethod: (filter, row) => {
         if (filter.value === "all") {
           return true;
         }
         return row[filter.id] === filter.value;
       },
-      Filter: ({filter, onChange}) => 
-        <select
-          onChange={event => onChange(event.target.value)}
-          style={{width: "100%"}}
-          value={filter ? filter.value : "all"}
-        >
-          <option value="all">All</option>
-          { categories.map((value) => {
-              return(<option value={value["name"]} key={value["id"]}>{value["name"]}</option>);
-            } ) 
-          }
-        </select>
+      Filter: ({filter, onChange}) => {
+        if (changePage && filter) {
+          filter.value = "all";
+        }
+        return(
+          <select
+            onChange={event => onChange(event.target.value)}
+            style={{width: "100%"}}
+            value={filter ? filter.value : "all"}
+          >
+            <option value="all">All</option>
+            { categories.map((value) => {
+                return(<option value={value["name"]} key={value["id"]}>{value["name"]}</option>);
+              } ) 
+            }
+          </select>
+        )
+      }
     },
     {
       accessor: 'dateCreated',
@@ -121,6 +149,31 @@ const TicketsTable = (props) => {
     {
       accessor: 'employeeUsername',
       Header: 'Assigned Employee',
+      filterable: employeeFilter,
+      filterMethod: (filter, row) => {
+        if (filter.value === "all") {
+          return true;
+        }
+        return row[filter.id] === filter.value;
+      },
+      Filter: ({filter, onChange}) => {
+        if (changePage && filter) {
+          filter.value = "all";
+        }
+        return(
+          <select
+            onChange={event => onChange(event.target.value)}
+            style={{width: "100%"}}
+            value={filter ? filter.value : "all"}
+          >
+            <option value="all">All</option>
+            { employees.map((value, index) => {
+                return(<option value={value["username"]} key={index}>{value["username"]}</option>);
+              } ) 
+            }
+          </select>
+        )
+      }
     },
     {
       Header: 'View/Edit',
@@ -153,6 +206,8 @@ const TicketsTable = (props) => {
       updatedTickets[rowIndex] = assignTicket;
       if (props.type === "employee" && !assign) {
         updatedTickets.splice(rowIndex, 1);
+        setTickets(updatedTickets);
+        _handleClose();
       }
       setTickets(updatedTickets);
     });

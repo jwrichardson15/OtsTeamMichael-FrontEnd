@@ -9,9 +9,10 @@
   display: flex;
   flex-direction: row;
   flex-grow: 1;
-  background-image: url(./images/glacier-national-park.jpg);
-  background-position: center;
-  background-repeat: no-repeat;
+  background: url(./images/glacier-national-park.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
 }
 
@@ -31,7 +32,7 @@
   width: -webkit-fill-available;
   padding-left: 4em;
   padding-right: 4em;
-  padding-top: 2em;
+  padding-top: 3em;
   padding-bottom: 2em;
 }
 
@@ -71,9 +72,10 @@ h6{
 }
 
 .ReactTable {
-  background-color: #888d94;
+  background-color:rgba(136,141,148,.9);
   color: #fff;
   border:2px solid #abb1b9;
+  font-size: 105%;
 }
 
 .ReactTable .rt-tbody .rt-tr-group {
@@ -89,4 +91,11 @@ h6{
   background: rgb(0,0,0,0) !important;
   color: black !important;
   
+}
+
+.card{
+  margin-top: 4%;
+  padding-left: 4%;
+  padding-right: 4%;
+  padding-bottom: 6%;
 }

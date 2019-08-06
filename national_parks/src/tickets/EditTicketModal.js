@@ -25,8 +25,7 @@ const EditTicketModal = (props) => {
       .then(result => {
         setStatuses(result);
       });
-    
-  }, []);
+  }, [props.currentTicket]);
 
   useEffect(() => {
     setInitialTicket(props.currentTicket);
