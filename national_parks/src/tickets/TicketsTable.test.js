@@ -5,6 +5,7 @@ import { mount } from 'enzyme';
 jest.mock('../api/categoryApi');
 jest.mock('../api/statusApi');
 jest.mock('../api/ticketApi');
+jest.mock('../api/employeeApi');
 jest.mock('../api/employeeTicketApi');
 jest.mock('../services/AuthenticationService');
 
