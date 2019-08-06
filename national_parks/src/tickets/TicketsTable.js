@@ -128,14 +128,14 @@ const TicketsTable = (props) => {
       filterable: false,
       Cell: row => (
         <ButtonToolbar>
-            <Button size="sm" className="tableButton" onClick={() => _viewModal(row)}><FontAwesomeIcon icon={faEye}/></Button> 
+            <Button size="sm" className="tableButton" id="ticketTableViewButton" onClick={() => _viewModal(row)}><FontAwesomeIcon icon={faEye}/></Button> 
             {
             tickets[row.index]["employeeUsername"] === user["username"] 
             ? 
-              <Button variant="danger" className="tableButton" onClick={() => _handleAssignment(false, row.index)} size="sm">Unassign</Button> 
+              <Button variant="danger" className="tableButton" id="ticketTableAssignButton" onClick={() => _handleAssignment(false, row.index)} size="sm">Unassign</Button>
             
           :
-            <Button variant="success" className="tableButton" onClick={() => _handleAssignment(true, row.index)} size="sm">Assign</Button>}
+            <Button variant="success" className="tableButton" id="ticketTableAssignButton" onClick={() => _handleAssignment(true, row.index)} size="sm">Assign</Button>}
         </ButtonToolbar>
       )
    }
