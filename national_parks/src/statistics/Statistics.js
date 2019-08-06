@@ -8,11 +8,12 @@ import { getCategories } from '../api/categoryApi';
 import { getStatuses } from '../api/statusApi';
 import { getParks } from '../api/parkApi';
 import { getParkTickets } from '../api/employeeTicketApi';
+import { getEmployees } from '../api/employeeApi';
 import ReactTable from 'react-table';
 import { Table } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2';
 import './Statistics.css';
-
+import Moment from 'react-moment';
 const Statistics = () => {
   const [selectedPark, setSelectedPark] = useState({});
   const [allParks, setAllParks] = useState([]);
@@ -22,6 +23,7 @@ const Statistics = () => {
   const [chartData, setChartData] = useState({labels: [], datasets: {}});
   const [statusStats, setStatusStats] = useState({});
   const [categoryStats, setCategoryStats] = useState({});
+  const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
     authenticationService.currentUser.subscribe(value => {
@@ -51,6 +53,10 @@ const Statistics = () => {
         category_[category["name"]] = 0
       });
       setCategoryStats({...category_});
+    });
+    getEmployees()
+    .then(result => {
+      setEmployees(result);
     });
   }, []);
 
@@ -183,11 +189,33 @@ const Statistics = () => {
     },
     {
       accessor: 'dateCreated',
-      Header: 'Date Created'
+      Header: 'Date Created',
+      Cell: props => {return props.value && <Moment format="MMM DD, YYYY hh:mma">{props["value"]}</Moment> }
     },
     {
       accessor: 'employeeUsername',
       Header: 'Assigned Employee',
+      filterMethod: (filter, row) => {
+        if (filter.value === "all") {
+          return true;
+        }
+        return row[filter.id] === filter.value;
+      },
+      Filter: ({filter, onChange}) => {
+        return(
+          <select
+            onChange={event => onChange(event.target.value)}
+            style={{width: "100%"}}
+            value={filter ? filter.value : "all"}
+          >
+            <option value="all">All</option>
+            { employees.map((value, index) => {
+                return(<option value={value["username"]} key={index}>{value["username"]}</option>);
+              } ) 
+            }
+          </select>
+        )
+      }
     }
   ];
 

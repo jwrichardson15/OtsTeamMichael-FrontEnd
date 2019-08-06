@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import EditTicketModal from './EditTicketModal';
 import './EditTicketModal.css';
+import Moment from 'react-moment';
 
 const TicketsTable = (props) => {
   const [tickets, setTickets] = useState([]);
@@ -27,6 +28,7 @@ const TicketsTable = (props) => {
   const [changePage, setChangePage] = useState(true);
   const [employees, setEmployees] = useState([]);
   const [employeeFilter, setEmployeeFilter] = useState(false);
+
   useEffect(() => {
     authenticationService.currentUser.subscribe(value => {
       if (value != null) {
@@ -52,6 +54,7 @@ const TicketsTable = (props) => {
             setLoading(false);
             setChangePage(false);
             setEmployeeFilter(false);
+
           });
         }
         
@@ -143,8 +146,10 @@ const TicketsTable = (props) => {
     },
     {
       accessor: 'dateCreated',
-      Header: 'Date Created'
-      // Cell: props => <span className='number'>{props.value.toLocale}</span>
+      Header: 'Date Created',
+      Cell: props => {return props.value && <Moment format="MMM DD, YYYY hh:mma">{props["value"]}</Moment> },
+      filterMethod: (filter, row) =>
+                    {console.log(filter)}
     },
     {
       accessor: 'employeeUsername',
@@ -259,6 +264,7 @@ const TicketsTable = (props) => {
 
       </h3>
       <ReactTable data={tickets} columns={tableColumns} filterable={true} defaultPageSize={10} />
+
       <EditTicketModal 
         currentTicket={currentTicket} 
         show={viewModal} 
