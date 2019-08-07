@@ -11,4 +11,11 @@
   padding: .1rem .6rem !important; 
 }
 
+a.navLink:hover {
+  color: whitesmoke;
+}
+
+.logout {
+  margin-left: 2rem;
+}
 

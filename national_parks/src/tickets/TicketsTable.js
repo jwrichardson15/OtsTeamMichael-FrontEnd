@@ -82,7 +82,8 @@ const TicketsTable = (props) => {
     {
       accessor: 'id',
       Header: 'ID',
-      width: 50
+      width: 50,
+      headerClassName: 'id'
     },
     {
       accessor: 'status',
@@ -147,8 +148,10 @@ const TicketsTable = (props) => {
     {
       accessor: 'dateCreated',
       Header: 'Date Created',
+      style: { 'whiteSpace': 'unset' },
       Cell: props => {return props.value && <Moment format="MMM DD, YYYY hh:mma">{props["value"]}</Moment> },
-      filterable: false
+      filterable: false,
+      headerClassName: 'date-created'
     },
     {
       accessor: 'employeeUsername',

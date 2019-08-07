@@ -3,6 +3,7 @@ import { Button, OverlayTrigger, Popover, } from 'react-bootstrap';
 import Login from './Login';
 import { authenticationService } from '../../services/AuthenticationService';
 import { withRouter } from 'react-router-dom';
+import "./Header.css";
 
 const LoginHeader = (props) => {
 
@@ -45,7 +46,7 @@ const LoginHeader = (props) => {
     return (
       <React.Fragment>
         {/* <span className="mr-2">Welcome {name}!</span> */}
-        <Button variant="outline-dark" onClick={doLogOut}>Logout</Button>
+        <Button variant="outline-dark" onClick={doLogOut} className="logout">Logout</Button>
       </React.Fragment>
     );
   }

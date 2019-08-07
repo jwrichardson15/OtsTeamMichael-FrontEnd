@@ -243,7 +243,7 @@ const Statistics = () => {
       </Row>
 
       <Row className="statisticRows">
-        <Col md={6}>
+        <Col md={6} sm={12}>
           <Row>
             <Col style={{paddingLeft : "0px"}}>
               <h4 style={{paddingBottom:"2%"}}>Ticket Status</h4>
@@ -278,18 +278,17 @@ const Statistics = () => {
             </Table>
           </Row>
         </Col>
-        <Col md={6}>
+        <Col md={6} sm={12}>
           <Row>
-            <Col style={{padding : "0px"}}><h4 style={{paddingLeft: "10%", paddingBottom:"2%"}}>Category Breakdown</h4></Col>
+            <Col style={{padding : "0px"}}><h4  className="categoryTitle">Category Breakdown</h4></Col>
           </Row>
-          <Row>
+          <Row >
             {chartData["labels"].length === 0 
             ? 
               <h5 style={{padding:"10%"}}>No Current Data</h5> 
             : 
               <Doughnut 
                 options = {{ 
-                  responsive: true,
                   legend: {
                     display: true,
                     position: 'right',
