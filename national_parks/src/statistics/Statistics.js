@@ -14,6 +14,7 @@ import { Table, Card } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2';
 import './Statistics.css';
 import Moment from 'react-moment';
+import { bindCallback } from 'rxjs';
 const Statistics = () => {
   const [selectedPark, setSelectedPark] = useState({});
   const [allParks, setAllParks] = useState([]);
@@ -190,7 +191,8 @@ const Statistics = () => {
     {
       accessor: 'dateCreated',
       Header: 'Date Created',
-      Cell: props => {return props.value && <Moment format="MMM DD, YYYY hh:mma">{props["value"]}</Moment> }
+      Cell: props => {return props.value && <Moment format="MMM DD, YYYY hh:mma">{props["value"]}</Moment> },
+      filterable: false
     },
     {
       accessor: 'employeeUsername',
@@ -248,7 +250,7 @@ const Statistics = () => {
             </Col>
           </Row>
           <Row>
-            <Table bordered style={{width:"80%", backgroundColor: "white"}}>
+            <Table bordered style={{width:"80%", backgroundColor: "rgba(255,255,255,.9)"}}>
               <thead>
                 <tr> 
                   <th>Status</th>
@@ -290,7 +292,11 @@ const Statistics = () => {
                   responsive: true,
                   legend: {
                     display: true,
-                    position: 'right'
+                    position: 'right',
+                    labels: {
+                      fontColor: 'black',
+                      fontSize: 13
+                    }
                   },
                 }} 
                 data={chartData} 

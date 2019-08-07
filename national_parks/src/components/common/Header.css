@@ -6,4 +6,9 @@
   padding-left: 10%;
 }
 
+.navLink {
+  color: black;
+  padding: .1rem .6rem !important; 
+}
+
 

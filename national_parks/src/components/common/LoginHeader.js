@@ -44,7 +44,7 @@ const LoginHeader = (props) => {
   } else {
     return (
       <React.Fragment>
-        <span className="mr-2">Welcome {name}!</span>
+        {/* <span className="mr-2">Welcome {name}!</span> */}
         <Button variant="outline-dark" onClick={doLogOut}>Logout</Button>
       </React.Fragment>
     );

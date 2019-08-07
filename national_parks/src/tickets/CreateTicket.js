@@ -81,7 +81,7 @@ const CreateTicket = () => {
   };
 
   return (
-    <Card as={Col} sm={{ span: 10, offset: 1 }} md={{ span: 8, offset: 2 }}>
+    <Card as={Col} sm={{ span: 10, offset: 1 }} md={{ span: 8, offset: 2 }} style={{backgroundColor: "rgba(255,255,255,.9)"}}>
       <Card.Body>
         <h3 className='createHeader'>Create Ticket</h3>
         <h6>Park Visitors! If you had any issues during your visit, please let us know by filling out this form.</h6>
