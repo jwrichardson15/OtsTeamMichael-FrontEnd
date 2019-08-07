@@ -136,12 +136,14 @@ const Statistics = () => {
     {
       accessor: 'id',
       Header: 'ID',
-      width: 50
+      width: 50,
+      headerClassName: 'id-header'
     },
     {
       accessor: 'status',
       Header: 'Status',
       width: 150,
+      headerClassName: 'status-header',
       style: { 'whiteSpace': 'unset' },
       filterMethod: (filter, row) => {
         if (filter.value === "all") {
@@ -168,6 +170,7 @@ const Statistics = () => {
       accessor: 'categoryName',
       Header: 'Category',
       style: { 'whiteSpace': 'unset' },
+      headerClassName: 'category-header',
       filterMethod: (filter, row) => {
         if (filter.value === "all") {
           return true;
@@ -191,12 +194,15 @@ const Statistics = () => {
     {
       accessor: 'dateCreated',
       Header: 'Date Created',
+      headerClassName: 'date-created',
       Cell: props => {return props.value && <Moment format="MMM DD, YYYY hh:mma">{props["value"]}</Moment> },
       filterable: false
     },
     {
       accessor: 'employeeUsername',
       Header: 'Assigned Employee',
+      headerClassName: 'park-employee-header',
+      className: 'park-employee-cell',
       filterMethod: (filter, row) => {
         if (filter.value === "all") {
           return true;
@@ -222,9 +228,9 @@ const Statistics = () => {
   ];
 
   return (
-    <>
+    <span className="statistics-page">
     <h3>{selectedPark["parkName"]} Statistics</h3>
-    <Container>
+    <Container >
       <Row className="statisticRows">
         <Col md={6} style={{paddingLeft : "0px"}}>
           <Form.Label style={{fontSize:"140%"}}>Select a Park</Form.Label>
@@ -313,11 +319,12 @@ const Statistics = () => {
             columns={tableColumns} 
             defaultPageSize={10} 
             filterable={true}
+            className="employee"
           />
         </Col>
       </Row>
     </Container>
-    </>
+    </span>
   );
 };
 

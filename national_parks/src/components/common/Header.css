@@ -19,3 +19,9 @@ a.navLink:hover {
   margin-left: 2rem;
 }
 
+@media only screen and (max-width: 800px) {
+  .logout {
+    margin-left: .6rem;
+  }
+}
+

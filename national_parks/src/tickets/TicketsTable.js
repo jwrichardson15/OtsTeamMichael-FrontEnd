@@ -15,6 +15,7 @@ import { faEye } from '@fortawesome/free-solid-svg-icons';
 import EditTicketModal from './EditTicketModal';
 import './EditTicketModal.css';
 import Moment from 'react-moment';
+import { getParks } from '../api/parkApi';
 
 const TicketsTable = (props) => {
   const [tickets, setTickets] = useState([]);
@@ -83,13 +84,14 @@ const TicketsTable = (props) => {
       accessor: 'id',
       Header: 'ID',
       width: 50,
-      headerClassName: 'id'
+      headerClassName: 'id-header'
     },
     {
       accessor: 'status',
       Header: 'Status',
       width: 150,
       style: { 'whiteSpace': 'unset' },
+      headerClassName: 'status-header',
       filterMethod: (filter, row) => {
         if (filter.value === "all") {
           return true;
@@ -119,7 +121,8 @@ const TicketsTable = (props) => {
       accessor: 'categoryName',
       Header: 'Category',
       style: { 'whiteSpace': 'unset' },
-      
+      headerClassName: 'category-header',
+      // width: 100,
       filterMethod: (filter, row) => {
         if (filter.value === "all") {
           return true;
@@ -156,6 +159,8 @@ const TicketsTable = (props) => {
     {
       accessor: 'employeeUsername',
       Header: 'Assigned Employee',
+      headerClassName: props.type === "park" ? 'park-employee-header' : 'employee-employee-header',
+      className: props.type === "park" ? 'park-employee-cell' : 'employee-employee-cell',
       filterable: employeeFilter,
       filterMethod: (filter, row) => {
         if (filter.value === "all") {
@@ -184,8 +189,9 @@ const TicketsTable = (props) => {
     },
     {
       Header: 'View/Edit',
-      width:150,
+      width: 150,
       filterable: false,
+      headerClassName: 'view-edit-header',
       Cell: row => (
         <ButtonToolbar>
             <Button size="sm" className="tableButton" id="ticketTableViewButton" onClick={() => _viewModal(row)}><FontAwesomeIcon icon={faEye}/></Button> 
@@ -265,7 +271,7 @@ const TicketsTable = (props) => {
         }
 
       </h3>
-      <ReactTable data={tickets} columns={tableColumns} filterable={true} defaultPageSize={10} />
+      <ReactTable data={tickets} columns={tableColumns} filterable={true} defaultPageSize={10} className={props.type} />
 
       <EditTicketModal 
         currentTicket={currentTicket} 
