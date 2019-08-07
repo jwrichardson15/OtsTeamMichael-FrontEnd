@@ -7,7 +7,7 @@ import LoginHeader from './LoginHeader';
 
 const Header = () => {
   return (
-    <Navbar bg="light" className="Header" expand="md">
+    <Navbar fixed="top" bg="light" className="Header" expand="md">
       <Navbar.Brand>
       <img
         src={nps}

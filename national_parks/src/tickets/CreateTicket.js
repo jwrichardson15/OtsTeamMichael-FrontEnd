@@ -83,7 +83,7 @@ const CreateTicket = () => {
   return (
     <Card as={Col} sm={{ span: 10, offset: 1 }} md={{ span: 8, offset: 2 }}>
       <Card.Body>
-        <h3 className='createHeader'>Create Ticket</h3>
+        <h2 className='createHeader'>Create Ticket</h2>
         <h6>Park Visitors! If you had any issues during your visit, please let us know by filling out this form.</h6>
         <StatusAlert status={formStatus} statusText={formText} setStatus={setFormStatus}/>
         <Form className='form' onSubmit={handleSubmit}>

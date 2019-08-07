@@ -193,7 +193,7 @@ const Statistics = () => {
 
   return (
     <>
-    <h3>{selectedPark["parkName"]} Statistics</h3>
+    <h2>{selectedPark["parkName"]} Statistics</h2>
     <Container>
       <Row className="statisticRows">
         <Col md={6} style={{paddingLeft : "0px"}}>

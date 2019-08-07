@@ -75,7 +75,7 @@ describe("TicketsTable", () => {
     });
     wrapper.update()
     await act(async () => {
-      wrapper.find("#ticketTableAssignButton").first().simulate('click');
+      wrapper.find("#ticketTableUnassignButton").first().simulate('click');
     });
     wrapper.update();
     expect(wrapper.find("Tbody").find("TrGroupComponent").first().text()).toEqual(expect.not.stringContaining("testEmployee"));

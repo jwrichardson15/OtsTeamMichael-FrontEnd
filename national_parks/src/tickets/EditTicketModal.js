@@ -80,7 +80,7 @@ const EditTicketModal = (props) => {
   return (
     <Modal show={props.show} onHide={_handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>View Ticket {initialTicket["id"]}</Modal.Title>
+          <Modal.Title>View {initialTicket["parkName"]}-Ticket {initialTicket["id"]}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <Form>
