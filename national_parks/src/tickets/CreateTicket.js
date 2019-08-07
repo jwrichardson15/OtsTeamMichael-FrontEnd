@@ -3,7 +3,7 @@ import { Alert, Button, Card, Col, Form } from 'react-bootstrap';
 import { getCategories } from '../api/categoryApi';
 import { getParks } from '../api/parkApi';
 import { createTicket } from '../api/ticketApi';
-
+import "./CreateTicket.css";
 const CreateTicket = () => {
 
   const ticketDefault = {"parkId": 0, "categoryId": 0, "email": "", description: "", "statusId": 1};
@@ -81,21 +81,21 @@ const CreateTicket = () => {
   };
 
   return (
-    <Card as={Col} sm={{ span: 10, offset: 1 }} md={{ span: 8, offset: 2 }}>
+    <Card as={Col} sm={{ span: 10, offset: 1 }} md={{ span:10, offset: 1 }} lg={{ span:8, offset: 2 }} style={{backgroundColor: "rgba(255,255,255,.9)"}}>
       <Card.Body>
         <h2 className='createHeader'>Create Ticket</h2>
         <h6>Park Visitors! If you had any issues during your visit, please let us know by filling out this form.</h6>
         <StatusAlert status={formStatus} statusText={formText} setStatus={setFormStatus}/>
         <Form className='form' onSubmit={handleSubmit}>
           <Form.Row>
-            <Form.Group as={Col} xs={12} md={6} controlId="formCreateTicketPark">
+            <Form.Group as={Col} xs={12} md={6} controlId="formCreateTicketPark" className="required">
               <Form.Label>Park</Form.Label>
               <Form.Control as="select" onChange={handleChange('parkId')} value={ticketData.parkId}>
                 <option value="0">Select Park</option>
                 {parksData.map((value, index) => {return <option key={index} value={value.id}>{value.parkName}</option>})}
               </Form.Control>
             </Form.Group>
-            <Form.Group as={Col} xs={12} md={6} controlId="formCreateTicketCategory">
+            <Form.Group as={Col} xs={12} md={6} controlId="formCreateTicketCategory" className="required">
               <Form.Label>Category</Form.Label>
               <Form.Control as="select" onChange={handleChange('categoryId')} value={ticketData.categoryId}>
                 <option value="0">Select Category</option>

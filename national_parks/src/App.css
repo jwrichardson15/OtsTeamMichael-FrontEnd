@@ -111,3 +111,21 @@ h6{
   margin-right: 8%;
 
 }
+/* @media
+  only screen 
+  and (max-width: 760px), (min-device-width: 768px) 
+  and (max-device-width: 1024px)  {
+  h3 {
+    color: aquamarine;
+  }
+} */
+
+@media only screen and (max-width: 800px) {
+  .App .body .content {
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+  .rt-th.date-created.rt-resizable-header.-cursor-pointer, .rt-tr-group .rt-td:nth-child(4)		{ display:none; visibility:hidden; }
+
+
+}

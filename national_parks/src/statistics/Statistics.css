@@ -5,3 +5,15 @@
 .statisticRows.selectPark.row {
   justify-content: center;
 }
+
+.categoryTitle {
+  padding-left: 10%; 
+  padding-bottom: 2%;
+}
+
+
+@media only screen and (max-width: 576px) {
+  .categoryTitle {
+    padding-left: 0%; 
+  }
+}

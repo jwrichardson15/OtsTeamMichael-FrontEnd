@@ -1,0 +1,4 @@
+.required.form-group .form-label:after {
+  content: "*";
+  color: red;
+}
