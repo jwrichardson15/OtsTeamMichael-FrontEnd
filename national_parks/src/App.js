@@ -21,9 +21,9 @@ const App = (props) => {
       <div className='App'>
         <Header />
         <div className='body'>
-          {
+          {/* {
             !userLoggedOut &&  <div className='sidebar'> <NavMenu /> </div>
-          }
+          } */}
           <div className='content'>
             <Routes />
           </div>

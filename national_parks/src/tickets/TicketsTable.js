@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import EditTicketModal from './EditTicketModal';
 import './EditTicketModal.css';
+import Moment from 'react-moment';
 
 const TicketsTable = (props) => {
   const [tickets, setTickets] = useState([]);
@@ -27,6 +28,7 @@ const TicketsTable = (props) => {
   const [changePage, setChangePage] = useState(true);
   const [employees, setEmployees] = useState([]);
   const [employeeFilter, setEmployeeFilter] = useState(false);
+
   useEffect(() => {
     authenticationService.currentUser.subscribe(value => {
       if (value != null) {
@@ -52,6 +54,7 @@ const TicketsTable = (props) => {
             setLoading(false);
             setChangePage(false);
             setEmployeeFilter(false);
+
           });
         }
         
@@ -79,7 +82,8 @@ const TicketsTable = (props) => {
     {
       accessor: 'id',
       Header: 'ID',
-      width: 50
+      width: 50,
+      headerClassName: 'id'
     },
     {
       accessor: 'status',
@@ -143,8 +147,11 @@ const TicketsTable = (props) => {
     },
     {
       accessor: 'dateCreated',
-      Header: 'Date Created'
-      // Cell: props => <span className='number'>{props.value.toLocale}</span>
+      Header: 'Date Created',
+      style: { 'whiteSpace': 'unset' },
+      Cell: props => {return props.value ? <Moment format="MMM DD, YYYY hh:mma">{props["value"]}</Moment> : null},
+      filterable: false,
+      headerClassName: 'date-created'
     },
     {
       accessor: 'employeeUsername',
@@ -185,7 +192,7 @@ const TicketsTable = (props) => {
             {
             tickets[row.index]["employeeUsername"] === user["username"] 
             ? 
-              <Button variant="danger" className="tableButton" id="ticketTableAssignButton" onClick={() => _handleAssignment(false, row.index)} size="sm">Unassign</Button>
+              <Button variant="danger" className="tableButton" id="ticketTableAssignButton" onClick={() => _handleAssignment(false, row.index)} size="sm">Unassign</Button> 
             
           :
             <Button variant="success" className="tableButton" id="ticketTableAssignButton" onClick={() => _handleAssignment(true, row.index)} size="sm">Assign</Button>}
@@ -259,6 +266,7 @@ const TicketsTable = (props) => {
 
       </h3>
       <ReactTable data={tickets} columns={tableColumns} filterable={true} defaultPageSize={10} />
+
       <EditTicketModal 
         currentTicket={currentTicket} 
         show={viewModal} 
