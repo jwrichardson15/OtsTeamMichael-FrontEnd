@@ -2,15 +2,15 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 
-jest.mock('../api/categoryApi');
-jest.mock('../api/statusApi');
-jest.mock('../api/ticketApi');
-jest.mock('../api/employeeApi');
-jest.mock('../api/employeeTicketApi');
-jest.mock('../services/AuthenticationService');
+jest.mock('../../../api/categoryApi');
+jest.mock('../../../api/statusApi');
+jest.mock('../../../api/ticketApi');
+jest.mock('../../../api/employeeApi');
+jest.mock('../../../api/employeeTicketApi');
+jest.mock('../../../services/AuthenticationService');
 
-import { authenticationService } from '../services/AuthenticationService';
-import TicketsTable from './TicketsTable.js';
+import { authenticationService } from '../../../services/AuthenticationService';
+import TicketsTable from './TicketsTable';
 
 describe("TicketsTable", () => {
 

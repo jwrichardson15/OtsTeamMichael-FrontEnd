@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react';
 import { Modal, Row, Col, Form, Button, ButtonToolbar } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faBan, faSave } from '@fortawesome/free-solid-svg-icons';
-import { getCategories } from '../api/categoryApi';
-import { getStatuses } from '../api/statusApi';
+import { getCategories } from '../../../api/categoryApi';
+import { getStatuses } from '../../../api/statusApi';
 import './EditTicketModal.css';
 
 const EditTicketModal = (props) => {
@@ -74,6 +74,8 @@ const EditTicketModal = (props) => {
   const _handleAssignment = (assign) => {
     initialTicket["employeeUsername"] = assign ? props.user["username"] : null;
     setInitialTicket(initialTicket);
+    //need to receive value here and update the not editing state tickets
+    
     props.assignment(assign);
   }
 

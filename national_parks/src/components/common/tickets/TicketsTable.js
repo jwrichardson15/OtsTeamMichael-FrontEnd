@@ -1,21 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import { getParkTickets } from '../api/employeeTicketApi';
-import { getEmployeeTickets } from '../api/employeeTicketApi';
-import { getCategories } from '../api/categoryApi';
-import { getStatuses } from '../api/statusApi';
-import { updateTicket } from '../api/ticketApi';
-import { getEmployees } from '../api/employeeApi';
+import { getParkTickets } from '../../../api/employeeTicketApi';
+import { getEmployeeTickets } from '../../../api/employeeTicketApi';
+import { getCategories } from '../../../api/categoryApi';
+import { getStatuses } from '../../../api/statusApi';
+import { updateTicket } from '../../../api/ticketApi';
+import { getEmployees } from '../../../api/employeeApi';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import ReactTable from 'react-table';
-import { authenticationService } from '../services/AuthenticationService';
+import { authenticationService } from '../../../services/AuthenticationService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import EditTicketModal from './EditTicketModal';
 import './EditTicketModal.css';
 import Moment from 'react-moment';
-import { getParks } from '../api/parkApi';
+import { getParks } from '../../../api/parkApi';
 
 const TicketsTable = (props) => {
   const [tickets, setTickets] = useState([]);
@@ -208,11 +208,16 @@ const TicketsTable = (props) => {
   ];
 
   const _handleAssignment = (assign, index) => {
+    console.log(assign, index)
     var rowIndex = currentIndex;
+    var assignTicket = {};
     if (index) {
       rowIndex = index;
+      assignTicket = {...tickets[index]};
     }
-    var assignTicket = {...tickets[rowIndex]};
+    else {
+      assignTicket = {...tickets[currentIndex]}
+    }
     assignTicket["employeeUsername"] = assign ? user["username"] : null;
     updateTicket(tickets[rowIndex]["id"], assignTicket).then(response => {
       const updatedTickets = JSON.parse(JSON.stringify(tickets));
@@ -227,20 +232,22 @@ const TicketsTable = (props) => {
   }
 
   const _handleSave = (ticket) => {
-    updateTicket(ticket["id"], ticket);
-    let newParkTicket = JSON.parse(JSON.stringify(tickets));
-    if (props.type === "park" || newParkTicket[currentIndex]["id"] === ticket["id"]) {
-      newParkTicket[currentIndex] = ticket;
-      setTickets(newParkTicket);
-    }
+    updateTicket(ticket["id"], ticket).then(response => {
+      let newParkTicket = JSON.parse(JSON.stringify(tickets));
+      if (props.type === "park" || newParkTicket[currentIndex]["id"] === ticket["id"]) {
+        newParkTicket[currentIndex] = ticket;
+        setTickets(newParkTicket);
+      }
+    });
+    
   }
 
   const _handleCancel = (ticket) => {
     let newParkTicket = JSON.parse(JSON.stringify(tickets));
-    if (props.type === "park" || newParkTicket[currentIndex]["id"] === ticket["id"]) {
-      newParkTicket[currentIndex] = ticket;
-      setTickets(newParkTicket);
-    }
+    // if (props.type === "park" || newParkTicket[currentIndex]["id"] === ticket["id"]) {
+    //   newParkTicket[currentIndex] = ticket;
+    //   setTickets(newParkTicket);
+    // }
     return newParkTicket[currentIndex];
   }
 
@@ -272,8 +279,7 @@ const TicketsTable = (props) => {
 
       </h3>
       <ReactTable data={tickets} columns={tableColumns} filterable={true} defaultPageSize={10} className={props.type} />
-
-      <EditTicketModal 
+h      <EditTicketModal 
         currentTicket={currentTicket} 
         show={viewModal} 
         hide={_handleClose} 
@@ -282,7 +288,6 @@ const TicketsTable = (props) => {
         user={user}
         assignment={_handleAssignment}
       />
-      
     </div>
   );
 };

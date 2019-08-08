@@ -3,18 +3,19 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import {authenticationService} from '../services/AuthenticationService';
-import { getCategories } from '../api/categoryApi';
-import { getStatuses } from '../api/statusApi';
-import { getParks } from '../api/parkApi';
-import { getParkTickets } from '../api/employeeTicketApi';
-import { getEmployees } from '../api/employeeApi';
+import {authenticationService} from '../../../services/AuthenticationService';
+import { getCategories } from '../../../api/categoryApi';
+import { getStatuses } from '../../../api/statusApi';
+import { getParks } from '../../../api/parkApi';
+import { getParkTickets } from '../../../api/employeeTicketApi';
+import { getEmployees } from '../../../api/employeeApi';
 import ReactTable from 'react-table';
 import { Table, Card } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2';
 import './Statistics.css';
 import Moment from 'react-moment';
 import { bindCallback } from 'rxjs';
+
 const Statistics = () => {
   const [selectedPark, setSelectedPark] = useState({});
   const [allParks, setAllParks] = useState([]);

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Card, Col, Form } from 'react-bootstrap';
-import { getCategories } from '../api/categoryApi';
-import { getParks } from '../api/parkApi';
-import { createTicket } from '../api/ticketApi';
+import { getCategories } from '../../../api/categoryApi';
+import { getParks } from '../../../api/parkApi';
+import { createTicket } from '../../../api/ticketApi';
 import "./CreateTicket.css";
+
+/**
+ * Form 
+ */
 const CreateTicket = () => {
 
   const ticketDefault = {"parkId": 0, "categoryId": 0, "email": "", description: "", "statusId": 1};
-
   const [formStatus, setFormStatus] = useState("");
   const [formText, setFormText] = useState("");
   const [categoriesData, setCategoriesData] = useState([]);
@@ -51,7 +54,7 @@ const CreateTicket = () => {
     }
     return null;
   }
-
+  
   const handleFailure = () => {
     setFormStatus("danger");
     setFormText("An error occured. Please try again.");
@@ -62,7 +65,8 @@ const CreateTicket = () => {
     setFormText("Thank you for submitting!");
     setTicketData(ticketDefault);
   };
-
+  
+  
   const handleSubmit = event => {
     event.preventDefault();
     if (ticketData.parkId === "0" || ticketData.categoryId === "0" ||
