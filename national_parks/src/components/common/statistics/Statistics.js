@@ -230,8 +230,8 @@ const Statistics = () => {
 
   return (
     <span className="statistics-page">
-    <h3>{selectedPark["parkName"]} Statistics</h3>
-    <Container >
+    <h2>{selectedPark["parkName"]} Statistics</h2>
+    <Container>
       <Row className="statisticRows">
         <Col md={6} style={{paddingLeft : "0px"}}>
           <Form.Label style={{fontSize:"140%"}}>Select a Park</Form.Label>

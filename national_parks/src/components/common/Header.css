@@ -1,5 +1,8 @@
 .Header.navbar {
   background-color: #6899BA !important;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
 }
 
 .HeaderTitle{

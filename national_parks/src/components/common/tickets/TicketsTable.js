@@ -198,7 +198,7 @@ const TicketsTable = (props) => {
             {
             tickets[row.index]["employeeUsername"] === user["username"] 
             ? 
-              <Button variant="danger" className="tableButton" id="ticketTableAssignButton" onClick={() => _handleAssignment(false, row.index)} size="sm">Unassign</Button> 
+              <Button variant="danger" className="tableButton" id="ticketTableUnassignButton" onClick={() => _handleAssignment(false, row.index)} size="sm">Unassign</Button>
             
           :
             <Button variant="success" className="tableButton" id="ticketTableAssignButton" onClick={() => _handleAssignment(true, row.index)} size="sm">Assign</Button>}
@@ -269,17 +269,17 @@ const TicketsTable = (props) => {
     </Spinner>
     :
     <div>
-      <h3 className='createHeader'>
+      <h2 className='createHeader'>
         {props.type === "park" 
         ? 
-          `${user["parkName"]} Park Tickets`
+          `${user["parkName"]} - Tickets`
         :
           `${user["fname"]} ${user["lname"]}'s Tickets`
         }
 
-      </h3>
+      </h2>
       <ReactTable data={tickets} columns={tableColumns} filterable={true} defaultPageSize={10} className={props.type} />
-h      <EditTicketModal 
+     <EditTicketModal 
         currentTicket={currentTicket} 
         show={viewModal} 
         hide={_handleClose} 

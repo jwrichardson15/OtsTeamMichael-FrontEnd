@@ -82,7 +82,7 @@ const EditTicketModal = (props) => {
   return (
     <Modal show={props.show} onHide={_handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>View Ticket {initialTicket["id"]}</Modal.Title>
+          <Modal.Title> {!editMode ? 'View ' : 'Edit '} {initialTicket["parkName"]}-Ticket {initialTicket["id"]}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <Form>
@@ -163,17 +163,12 @@ const EditTicketModal = (props) => {
                       disabled={true}
                     />
                   </Form.Group>
-                  {props.currentTicket["employeeUsername"] === props.user["username"] 
-            ? 
-              <Button variant="danger" id="assignButton" onClick={() => {_handleAssignment(false)}} size="sm">Unassign</Button> 
-          :
-            <Button variant="success" id="assignButton" onClick={() => {_handleAssignment(true)}} size="sm">Assign</Button>}
                 </Col>
               </Row>
               <Row>
                 <Col>
                   <Form.Group>
-                    <Form.Label>Notes</Form.Label>
+                    <Form.Label>Employee Notes</Form.Label>
                     <Form.Control
                       value={editingTicket["employeeNotes"] || ''}
                       disabled={!editMode}
