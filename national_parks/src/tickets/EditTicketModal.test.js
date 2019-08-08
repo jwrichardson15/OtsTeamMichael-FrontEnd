@@ -18,45 +18,6 @@ describe("EditTicketModal", () => {
     });
   });
 
-  it("renders unassign button", async () => {
-
-    const testTicket = {'id': 1, 'employeeUsername': 'testUser'};
-    const testUser = {'username': 'testUser'};
-    var assigned;
-
-    const assign = (newAssigned) => {
-      assigned = newAssigned;
-    }
-    
-    var wrapper;
-    
-    await act(async () => {
-      wrapper = await mount(<EditTicketModal currentTicket={testTicket} user={testUser} show={true} assignment={assign}/>);
-    });
-    wrapper.find("#assignButton").last().simulate("click");
-    wrapper.find("#assignButton").last().simulate("click");
-    expect(assigned).toBe(false);
-  });
-  
-  it("handles assign button", async () => {
-
-    const testTicket = {'id': 1, 'employeeUsername': 'testUser'};
-    const testUser = {'username': 'testUser2'};
-    var assigned;
-
-    const assign = (newAssigned) => {
-      assigned = newAssigned;
-    }
-
-    var wrapper;
-    
-    await act(async () => {
-      wrapper = await mount(<EditTicketModal currentTicket={testTicket} user={testUser} show={true} assignment={assign}/>);
-    });
-    wrapper.find("#assignButton").last().simulate("click");
-    expect(assigned).toBe(true);
-  });
-
   it("can close", async () => {
 
     const testTicket = {'id': 1, 'employeeUsername': 'testUser'};
