@@ -13,8 +13,9 @@ import ReactTable from 'react-table';
 import { Table, Card } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2';
 import './Statistics.css';
-import Moment from 'react-moment';
+import moment from 'moment';
 import { bindCallback } from 'rxjs';
+
 
 const Statistics = () => {
   const [selectedPark, setSelectedPark] = useState({});
@@ -196,7 +197,7 @@ const Statistics = () => {
       accessor: 'dateCreated',
       Header: 'Date Created',
       headerClassName: 'date-created',
-      Cell: props => {return props.value && <Moment format="MMM DD, YYYY hh:mma">{props["value"]}</Moment> },
+      Cell: props => {return props.value ? moment(props.value).format("MMM DD, YYYY hh:mma") : null},
       filterable: false
     },
     {
