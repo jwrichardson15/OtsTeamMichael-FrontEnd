@@ -5,6 +5,7 @@ import { faEdit, faBan, faSave } from '@fortawesome/free-solid-svg-icons';
 import { getCategories } from '../../../api/categoryApi';
 import { getStatuses } from '../../../api/statusApi';
 import './EditTicketModal.css';
+import moment from 'moment';
 
 const EditTicketModal = (props) => {
   const [editMode, setEditMode] = useState(false);
@@ -71,13 +72,13 @@ const EditTicketModal = (props) => {
     props.hide();
   }
 
-  const _handleAssignment = (assign) => {
-    initialTicket["employeeUsername"] = assign ? props.user["username"] : null;
-    setInitialTicket(initialTicket);
-    //need to receive value here and update the not editing state tickets
+  // const _handleAssignment = (assign) => {
+  //   initialTicket["employeeUsername"] = assign ? props.user["username"] : null;
+  //   setInitialTicket(initialTicket);
+  //   //need to receive value here and update the not editing state tickets
     
-    props.assignment(assign);
-  }
+  //   props.assignment(assign);
+  // }
 
   return (
     <Modal show={props.show} onHide={_handleClose}>
@@ -141,7 +142,7 @@ const EditTicketModal = (props) => {
                 <Col>
                   <Form.Label>Date Created</Form.Label>
                   <Form.Control
-                    defaultValue={editingTicket["dateCreated"]}
+                    defaultValue={ props.currentTicket["dateCreated"] ? moment(props.currentTicket["dateCreated"]).format("MMM DD, YYYY hh:mma") : 'N/A'} 
                     disabled={true}
                   />
                 </Col>

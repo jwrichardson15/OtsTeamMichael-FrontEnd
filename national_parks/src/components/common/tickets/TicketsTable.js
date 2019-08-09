@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import EditTicketModal from './EditTicketModal';
 import './EditTicketModal.css';
-import Moment from 'react-moment';
+import moment from 'moment';
 import { getParks } from '../../../api/parkApi';
 
 const TicketsTable = (props) => {
@@ -152,7 +152,7 @@ const TicketsTable = (props) => {
       accessor: 'dateCreated',
       Header: 'Date Created',
       style: { 'whiteSpace': 'unset' },
-      Cell: props => {return props.value ? <Moment format="MMM DD, YYYY hh:mma">{props["value"]}</Moment> : null},
+      Cell: props => {return props.value ? moment(props.value).format("MMM DD, YYYY hh:mma") : null},
       filterable: false,
       headerClassName: 'date-created'
     },
@@ -208,7 +208,6 @@ const TicketsTable = (props) => {
   ];
 
   const _handleAssignment = (assign, index) => {
-    console.log(assign, index)
     var rowIndex = currentIndex;
     var assignTicket = {};
     if (index) {
@@ -225,7 +224,6 @@ const TicketsTable = (props) => {
       if (props.type === "employee" && !assign) {
         updatedTickets.splice(rowIndex, 1);
         setTickets(updatedTickets);
-        _handleClose();
       }
       setTickets(updatedTickets);
     });
@@ -286,7 +284,7 @@ const TicketsTable = (props) => {
         onSave={_handleSave}
         onCancel={_handleCancel}
         user={user}
-        assignment={_handleAssignment}
+        // assignment={_handleAssignment}
       />
     </div>
   );
